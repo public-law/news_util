@@ -28,6 +28,11 @@ cal_codes = %{
   "WIC"  => "Welfare and Institutions Code",
 }
 
+code_abbrevs = %{
+  "Education Code" => "Educ Code"
+}
+
+
 url      = "https://www.cde.ca.gov/sp/ch/qandasec5.asp"
 response = HTTPoison.get!(url)
 pattern  = ~r/sectionNum=[^&]+&lawCode=\w\w\w/
@@ -38,7 +43,8 @@ Regex.scan(pattern, response.body)
     |> String.replace("&lawCode=", " ")
     |> String.split(" ")
   end)
-|> Enum.map(fn [section, code] -> {cal_codes[code], String.replace_suffix(section, ".", "")} end)
+|> Enum.map(fn [section, code] -> {code_abbrevs[cal_codes[code]], String.replace_suffix(section, ".", "")} end)
 |> Enum.map(fn {code, section} -> "CA #{code} Section #{section}" end)
+|> Enum.sort()
 |> Enum.uniq()
 |> IO.inspect()
