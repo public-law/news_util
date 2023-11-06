@@ -90,6 +90,14 @@ defmodule NewsUtil do
         |> String.replace("&", " ")
         |> String.split(" ")
       end)
+    # Reverse the list if the lawCode is first
+    |> Enum.map(fn [law_code, section] ->
+        if String.match?(law_code, ~r/^[A-Z]/) do
+          [section, law_code]
+        else
+          [law_code, section]
+        end
+      end)
     |> Enum.map(fn [section, code] -> {@code_abbrevs[@cal_codes[code]], String.replace_suffix(section, ".", "")} end)
     |> Enum.map(fn {code, section} -> "CA #{code} Section #{section}" end)
     |> Enum.sort()
