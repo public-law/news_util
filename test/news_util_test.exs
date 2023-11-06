@@ -14,4 +14,9 @@ defmodule NewsUtilTest do
     html = fixture("qandasec5.asp")
     assert NewsUtil.find_citations(html) == ["CA Educ Code Section 47605", "CA Educ Code Section 47605.6"]
   end
+
+  test "finds California citations when the leginfo links have reversed params" do
+    html = fixture("qandasec6.asp")
+    assert NewsUtil.find_citations(html) == ["CA Educ Code Section 47605"]
+  end
 end
