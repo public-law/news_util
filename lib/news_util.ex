@@ -64,7 +64,6 @@ defmodule NewsUtil do
     "Welfare and Institutions Code" => "Welf & Inst Code"
   }
 
-
   @spec find_citations(binary()) :: list()
   @doc """
   Find citations in a string of HTML.
@@ -84,22 +83,20 @@ defmodule NewsUtil do
       end)
       |> List.flatten()
 
-    params_map =
+    params_maps =
       hrefs
       |> Enum.map(fn href ->
         String.split(href, "?")
         |> List.last()
-        |> String.split("&")
-        |> Enum.map(fn param ->
-          String.split(param, "=")
-        end)
+        |> URI.decode_query()
       end)
-      |> Enum.map(fn [[k1, v1], [k2, v2]] -> %{k1 => v1, k2 => v2} end)
 
-    params_map
-      |> Enum.map(fn m -> "CA #{@code_abbrevs[@cal_codes[m["lawCode"]]]} Section #{m["sectionNum"]}" end)
-      |> Enum.map(fn s -> String.replace_suffix(s, ".", "") end)
-      |> Enum.uniq()
-      |> Enum.sort()
-    end
+    params_maps
+    |> Enum.map(fn m ->
+      "CA #{@code_abbrevs[@cal_codes[m["lawCode"]]]} Section #{m["sectionNum"]}"
+    end)
+    |> Enum.map(fn s -> String.replace_suffix(s, ".", "") end)
+    |> Enum.uniq()
+    |> Enum.sort()
+  end
 end
