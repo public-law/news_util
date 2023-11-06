@@ -77,16 +77,20 @@ defmodule NewsUtil do
       |> List.flatten()
       |> Enum.filter(&(String.match?(&1, ~r/leginfo\.legislature\.ca\.gov/)))
 
-    params_maps =
-      leginfo_urls
-      |> Enum.map(&(URI.decode_query(URI.parse(&1).query)))
-
-    params_maps
-    |> Enum.map(fn m ->
-      "CA #{@code_abbrevs[@cal_codes[m["lawCode"]]]} Section #{m["sectionNum"]}"
-      |> String.replace_suffix(".", "")
+    leginfo_urls
+    |> Enum.map(fn url ->
+      URI.parse(url)
+      |> Map.get(:query)
+      |> URI.decode_query()
+      |> make_cite()
     end)
     |> Enum.sort()
     |> Enum.uniq()
+  end
+
+
+  defp make_cite(query_map) do
+    "CA #{@code_abbrevs[@cal_codes[query_map["lawCode"]]]} Section #{query_map["sectionNum"]}"
+    |> String.replace_suffix(".", "")
   end
 end
