@@ -86,8 +86,7 @@ defmodule NewsUtil do
     params_maps =
       hrefs
       |> Enum.map(fn href ->
-        String.split(href, "?")
-        |> List.last()
+        URI.parse(href).query
         |> URI.decode_query()
       end)
 
