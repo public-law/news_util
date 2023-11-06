@@ -75,9 +75,7 @@ defmodule NewsUtil do
       document
       |> Floki.attribute("a", "href")
       |> List.flatten()
-      |> Enum.filter(fn url ->
-        String.match?(url, ~r/leginfo\.legislature\.ca\.gov/)
-      end)
+      |> Enum.filter(&(String.match?(&1, ~r/leginfo\.legislature\.ca\.gov/)))
 
     params_maps =
       urls
