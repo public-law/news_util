@@ -95,11 +95,6 @@ defmodule NewsUtil do
     |> String.replace_suffix(".", "")
   end
 
-  defp leginfo_url?(%{host: "leginfo.legislature.ca.gov"}) do
-    true
-  end
-
-  defp leginfo_url?(_) do
-    false
-  end
+  defp leginfo_url?(%{host: "leginfo.legislature.ca.gov"}), do: true
+  defp leginfo_url?(_),  do: false
 end
