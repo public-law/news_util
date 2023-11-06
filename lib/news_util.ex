@@ -75,6 +75,7 @@ defmodule NewsUtil do
       document
       |> Floki.attribute("a", "href")
       |> List.flatten()
+      |> Enum.map(&URI.parse/1)
       |> Enum.filter(&leginfo_url?/1)
 
     leginfo_urls
@@ -83,23 +84,22 @@ defmodule NewsUtil do
     |> Enum.uniq()
   end
 
-
-  defp leginfo_url_to_cite(url) do
-    url
-    |> URI.parse()
-    |> Map.get(:query)
+  defp leginfo_url_to_cite(%{query: query}) do
+    query
     |> URI.decode_query()
     |> make_cite()
   end
-
 
   defp make_cite(%{"lawCode" => code, "sectionNum" => section}) do
     "CA #{@code_abbrevs[@cal_codes[code]]} Section #{section}"
     |> String.replace_suffix(".", "")
   end
 
+  defp leginfo_url?(%{host: "leginfo.legislature.ca.gov"}) do
+    true
+  end
 
-  defp leginfo_url?(url) do
-    String.match?(url, ~r/leginfo\.legislature\.ca\.gov/)
+  defp leginfo_url?(_) do
+    false
   end
 end
