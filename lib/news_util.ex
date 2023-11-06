@@ -81,10 +81,7 @@ defmodule NewsUtil do
 
     params_maps =
       urls
-      |> Enum.map(fn href ->
-        URI.parse(href).query
-        |> URI.decode_query()
-      end)
+      |> Enum.map(&(URI.decode_query(URI.parse(&1).query)))
 
     params_maps
     |> Enum.map(fn m ->
