@@ -71,7 +71,7 @@ defmodule NewsUtil do
   def find_citations(html) do
     {:ok, document} = Floki.parse_document(html)
 
-    hrefs =
+    urls =
       Floki.find(document, "a[href]")
       |> Enum.map(fn anchor ->
         Floki.attribute(anchor, "href")
@@ -82,7 +82,7 @@ defmodule NewsUtil do
       end)
 
     params_maps =
-      hrefs
+      urls
       |> Enum.map(fn href ->
         URI.parse(href).query
         |> URI.decode_query()
