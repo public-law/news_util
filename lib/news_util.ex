@@ -86,7 +86,8 @@ defmodule NewsUtil do
     Regex.scan(@pattern, html)
     |> Enum.map(fn [match] ->
         String.replace(match, "sectionNum=", "")
-        |> String.replace("&lawCode=", " ")
+        |> String.replace("lawCode=", "")
+        |> String.replace("&", " ")
         |> String.split(" ")
       end)
     |> Enum.map(fn [section, code] -> {@code_abbrevs[@cal_codes[code]], String.replace_suffix(section, ".", "")} end)
