@@ -84,6 +84,10 @@ defmodule NewsUtil do
     |> Enum.uniq()
   end
 
+
+  defp leginfo_url?(%{host: "leginfo.legislature.ca.gov"}), do: true
+  defp leginfo_url?(_),  do: false
+
   defp leginfo_url_to_cite(%{query: query}) do
     query
     |> URI.decode_query()
@@ -94,7 +98,4 @@ defmodule NewsUtil do
     "CA #{@code_abbrevs[@cal_codes[code]]} Section #{section}"
     |> String.replace_suffix(".", "")
   end
-
-  defp leginfo_url?(%{host: "leginfo.legislature.ca.gov"}), do: true
-  defp leginfo_url?(_),  do: false
 end
