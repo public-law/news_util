@@ -75,17 +75,21 @@ defmodule NewsUtil do
       document
       |> Floki.attribute("a", "href")
       |> List.flatten()
-      |> Enum.filter(&(String.match?(&1, ~r/leginfo\.legislature\.ca\.gov/)))
+      |> Enum.filter(&String.match?(&1, ~r/leginfo\.legislature\.ca\.gov/))
 
     leginfo_urls
-    |> Enum.map(fn url ->
-      URI.parse(url)
-      |> Map.get(:query)
-      |> URI.decode_query()
-      |> make_cite()
-    end)
+    |> Enum.map(&leginfo_url_to_cite/1)
     |> Enum.sort()
     |> Enum.uniq()
+  end
+
+
+  defp leginfo_url_to_cite(url) do
+    url
+    |> URI.parse()
+    |> Map.get(:query)
+    |> URI.decode_query()
+    |> make_cite()
   end
 
 
