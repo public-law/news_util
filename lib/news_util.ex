@@ -64,7 +64,6 @@ defmodule NewsUtil do
     "Welfare and Institutions Code" => "Welf & Inst Code"
   }
 
-  @pattern ~r/sectionNum=[^&]+&lawCode=[A-Z]+|lawCode=[^&]+&sectionNum=[\d\.]+/
 
   @spec find_citations(binary()) :: list()
   @doc """
@@ -96,28 +95,11 @@ defmodule NewsUtil do
         end)
       end)
       |> Enum.map(fn [[k1, v1], [k2, v2]] -> %{k1 => v1, k2 => v2} end)
-      |> dbg
 
-    Regex.scan(@pattern, html)
-    |> Enum.map(fn [match] ->
-      String.replace(match, "sectionNum=", "")
-      |> String.replace("lawCode=", "")
-      |> String.replace("&", " ")
-      |> String.split(" ")
-    end)
-    # Reverse the list if the lawCode is first
-    |> Enum.map(fn [law_code, section] ->
-      if String.match?(law_code, ~r/^[A-Z]/) do
-        [section, law_code]
-      else
-        [law_code, section]
-      end
-    end)
-    |> Enum.map(fn [section, code] ->
-      {@code_abbrevs[@cal_codes[code]], String.replace_suffix(section, ".", "")}
-    end)
-    |> Enum.map(fn {code, section} -> "CA #{code} Section #{section}" end)
-    |> Enum.sort()
-    |> Enum.uniq()
-  end
+    params_map
+      |> Enum.map(fn m -> "CA #{@code_abbrevs[@cal_codes[m["lawCode"]]]} Section #{m["sectionNum"]}" end)
+      |> Enum.map(fn s -> String.replace_suffix(s, ".", "") end)
+      |> Enum.uniq()
+      |> Enum.sort()
+    end
 end
