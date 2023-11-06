@@ -73,15 +73,13 @@ defmodule NewsUtil do
 
     hrefs =
       Floki.find(document, "a[href]")
-      |> Enum.filter(fn anchor ->
-        Floki.attribute(anchor, "href")
-        |> List.first()
-        |> String.match?(~r/leginfo\.legislature\.ca\.gov/)
-      end)
       |> Enum.map(fn anchor ->
         Floki.attribute(anchor, "href")
       end)
       |> List.flatten()
+      |> Enum.filter(fn url ->
+        String.match?(url, ~r/leginfo\.legislature\.ca\.gov/)
+      end)
 
     params_maps =
       hrefs
