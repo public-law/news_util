@@ -72,10 +72,8 @@ defmodule NewsUtil do
     {:ok, document} = Floki.parse_document(html)
 
     urls =
-      Floki.find(document, "a[href]")
-      |> Enum.map(fn anchor ->
-        Floki.attribute(anchor, "href")
-      end)
+      document
+      |> Floki.attribute("a", "href")
       |> List.flatten()
       |> Enum.filter(fn url ->
         String.match?(url, ~r/leginfo\.legislature\.ca\.gov/)
