@@ -66,18 +66,6 @@ defmodule NewsUtil do
 
   @pattern  ~r/sectionNum=[^&]+&lawCode=[A-Z]+|lawCode=[^&]+&sectionNum=[\d\.]+/
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> NewsUtil.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
 
   @doc """
   Find citations in a string of HTML.

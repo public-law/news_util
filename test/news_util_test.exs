@@ -6,9 +6,6 @@ defmodule NewsUtilTest do
     File.read!("test/fixtures/#{name}")
   end
 
-  test "greets the world" do
-    assert NewsUtil.hello() == :world
-  end
 
   test "finds California citations when the leginfo links are standard" do
     html = fixture("qandasec5.asp")
