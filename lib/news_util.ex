@@ -71,21 +71,21 @@ defmodule NewsUtil do
   def find_citations(html) do
     {:ok, document} = Floki.parse_document(html)
 
-    urls =
+    leginfo_urls =
       document
       |> Floki.attribute("a", "href")
       |> List.flatten()
       |> Enum.filter(&(String.match?(&1, ~r/leginfo\.legislature\.ca\.gov/)))
 
     params_maps =
-      urls
+      leginfo_urls
       |> Enum.map(&(URI.decode_query(URI.parse(&1).query)))
 
     params_maps
     |> Enum.map(fn m ->
       "CA #{@code_abbrevs[@cal_codes[m["lawCode"]]]} Section #{m["sectionNum"]}"
+      |> String.replace_suffix(".", "")
     end)
-    |> Enum.map(fn s -> String.replace_suffix(s, ".", "") end)
     |> Enum.sort()
     |> Enum.uniq()
   end
