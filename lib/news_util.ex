@@ -64,7 +64,7 @@ defmodule NewsUtil do
     "Welfare and Institutions Code" => "Welf & Inst Code",
   }
 
-  @pattern  ~r/sectionNum=[^&]+&lawCode=\w+|lawCode=[^&]+&sectionNum=[\d\.]+/
+  @pattern  ~r/sectionNum=[^&]+&lawCode=[A-Z]+|lawCode=[^&]+&sectionNum=[\d\.]+/
 
   @doc """
   Hello world.
