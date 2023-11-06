@@ -93,8 +93,8 @@ defmodule NewsUtil do
   end
 
 
-  defp make_cite(query_map) do
-    "CA #{@code_abbrevs[@cal_codes[query_map["lawCode"]]]} Section #{query_map["sectionNum"]}"
+  defp make_cite(%{"lawCode" => code, "sectionNum" => section}) do
+    "CA #{@code_abbrevs[@cal_codes[code]]} Section #{section}"
     |> String.replace_suffix(".", "")
   end
 
