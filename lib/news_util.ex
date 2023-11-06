@@ -67,6 +67,7 @@ defmodule NewsUtil do
   @pattern  ~r/sectionNum=[^&]+&lawCode=[A-Z]+|lawCode=[^&]+&sectionNum=[\d\.]+/
 
 
+  @spec find_citations(binary()) :: list()
   @doc """
   Find citations in a string of HTML.
   """
