@@ -95,7 +95,7 @@ defmodule NewsUtil do
       "CA #{@code_abbrevs[@cal_codes[m["lawCode"]]]} Section #{m["sectionNum"]}"
     end)
     |> Enum.map(fn s -> String.replace_suffix(s, ".", "") end)
-    |> Enum.uniq()
     |> Enum.sort()
+    |> Enum.uniq()
   end
 end
