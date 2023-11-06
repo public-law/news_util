@@ -2,6 +2,10 @@ defmodule NewsUtilTest do
   use ExUnit.Case
   doctest NewsUtil
 
+  def fixture(name) do
+    File.read!("test/fixtures/#{name}")
+  end
+
   test "greets the world" do
     assert NewsUtil.hello() == :world
   end
