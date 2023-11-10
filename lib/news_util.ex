@@ -104,7 +104,6 @@ defmodule NewsUtil do
   defp texas_public_law_url?(%{host: "texas.public.law"}), do: true
   defp texas_public_law_url?(_),  do: false
 
-
   defp texas_public_law_url_to_cite(%{path: path}) do
     path
     |> String.split("/")
@@ -125,6 +124,7 @@ defmodule NewsUtil do
     |> URI.decode_query()
     |> make_cite_to_cal_codes()
   end
+
 
   defp make_cite_to_cal_codes(%{"lawCode" => code, "sectionNum" => section}) do
     "CA #{@code_abbrevs[@cal_codes[code]]} Section #{section}"
