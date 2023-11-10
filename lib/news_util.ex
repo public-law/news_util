@@ -108,10 +108,11 @@ defmodule NewsUtil do
   defp texas_public_law_url_to_cite(%{path: path}) do
     path
     |> String.split("/")
-    |> Enum.filter(&(&1 != ""))
-    |> Enum.take(3)
+    |> List.last()
+    |> String.replace("_", " ")
+    |> String.split(" ")
+    |> Enum.map(&String.capitalize/1)
     |> Enum.join(" ")
-    |> String.replace_suffix(".", "")
   end
 
 
