@@ -16,4 +16,13 @@ defmodule NewsUtilTest do
     html = fixture("qandasec6.asp")
     assert NewsUtil.find_citations(html) == ["CA Educ Code Section 47605"]
   end
+
+  test "finds Texas citations when they're in public.law links" do
+    html = fixture("Formal Marriage License | Fort Bend County.html")
+    assert NewsUtil.find_citations(html) == [
+      "Tex. Fam. Code Section 2.003",
+      "Tex. Fam. Code Section 2.013",
+      "Tex. Fam. Code Section 2.203",
+    ]
+  end
 end
