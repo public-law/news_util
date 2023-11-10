@@ -91,10 +91,10 @@ defmodule NewsUtil do
   defp leginfo_url_to_cite(%{query: query}) do
     query
     |> URI.decode_query()
-    |> make_cite()
+    |> make_cite_to_cal_codes()
   end
 
-  defp make_cite(%{"lawCode" => code, "sectionNum" => section}) do
+  defp make_cite_to_cal_codes(%{"lawCode" => code, "sectionNum" => section}) do
     "CA #{@code_abbrevs[@cal_codes[code]]} Section #{section}"
     |> String.replace_suffix(".", "")
   end
