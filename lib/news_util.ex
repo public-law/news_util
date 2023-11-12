@@ -1,4 +1,5 @@
 import Enum
+import List
 import CalCodes
 
 
@@ -21,7 +22,7 @@ defmodule NewsUtil do
 
     document
     |> Floki.attribute("a", "href")
-    |> List.flatten()
+    |> flatten()
     |> map(&URI.parse/1)
   end
 
@@ -46,7 +47,7 @@ defmodule NewsUtil do
   defp texas_public_law_url_to_cite(%URI{path: path}) do
     path
     |> String.split("/")
-    |> List.last()
+    |> last()
     |> String.replace("_", " ")
     |> String.split(" ")
     |> map(&String.capitalize/1)
