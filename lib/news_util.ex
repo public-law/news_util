@@ -5,7 +5,7 @@ defmodule NewsUtil do
   @doc """
   Find citations in a string of HTML.
   """
-  def find_citations(html) do
+  def find_citations(html) when is_binary(html) do
     html
     |> uri_list()
     |> Enum.map(&transform/1)
@@ -24,7 +24,7 @@ defmodule NewsUtil do
   end
 
 
-  def uri_list(html) when is_binary(html) do
+  defp uri_list(html) when is_binary(html) do
     {:ok, document} = Floki.parse_document(html)
 
     document
