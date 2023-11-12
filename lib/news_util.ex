@@ -26,6 +26,11 @@ defmodule NewsUtil do
   end
 
 
+  def temp_file!() do
+    System.tmp_dir!() <> Integer.to_string(System.system_time())
+  end
+
+
   defp uri_list(html) when is_binary(html) do
     {:ok, document} = Floki.parse_document(html)
 
