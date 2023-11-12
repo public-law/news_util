@@ -14,16 +14,12 @@ defmodule NewsUtil do
   end
 
 
-  defp transform(url) do
+  def transform(%URI{} = url) do
     case url do
-      %{host: "leginfo.legislature.ca.gov"} ->
-        leginfo_url_to_cite(url)
+      %{host: "leginfo.legislature.ca.gov"} -> leginfo_url_to_cite(url)
+      %{host: "texas.public.law"}           -> texas_public_law_url_to_cite(url)
 
-      %{host: "texas.public.law"} ->
-        texas_public_law_url_to_cite(url)
-
-      _ ->
-        nil
+      _ -> nil
     end
   end
 
@@ -45,7 +41,7 @@ defmodule NewsUtil do
   end
 
 
-  defp texas_public_law_url_to_cite(%{path: path}) do
+  defp texas_public_law_url_to_cite(%URI{path: path}) do
     path
     |> String.split("/")
     |> List.last()
@@ -56,7 +52,7 @@ defmodule NewsUtil do
   end
 
 
-  defp leginfo_url_to_cite(%{query: query}) do
+  defp leginfo_url_to_cite(%URI{query: query}) do
     query
     |> URI.decode_query()
     |> make_cite_to_cal_codes()
