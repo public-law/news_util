@@ -14,16 +14,6 @@ defmodule NewsUtil do
   end
 
 
-  defp transform(%URI{} = url) do
-    case url do
-      %{host: "leginfo.legislature.ca.gov"} -> leginfo_url_to_cite(url)
-      %{host: "texas.public.law"}           -> texas_public_law_url_to_cite(url)
-
-      _ -> nil
-    end
-  end
-
-
   defp uri_list(html) when is_binary(html) do
     {:ok, document} = Floki.parse_document(html)
 
@@ -31,6 +21,16 @@ defmodule NewsUtil do
     |> Floki.attribute("a", "href")
     |> List.flatten()
     |> Enum.map(&URI.parse/1)
+  end
+
+
+  defp transform(%URI{} = url) do
+    case url do
+      %{host: "leginfo.legislature.ca.gov"} -> leginfo_url_to_cite(url)
+      %{host: "texas.public.law"}           -> texas_public_law_url_to_cite(url)
+
+      _ -> nil
+    end
   end
 
 
