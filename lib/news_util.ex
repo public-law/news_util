@@ -1,4 +1,6 @@
+import Enum
 import CalCodes
+
 
 defmodule NewsUtil do
   @spec find_citations(binary()) :: list()
@@ -8,8 +10,8 @@ defmodule NewsUtil do
   def find_citations(html) when is_binary(html) do
     html
     |> uri_list()
-    |> Enum.map(&transform/1)
-    |> Enum.filter(&is_binary/1)
+    |> map(&transform/1)
+    |> filter(&is_binary/1)
     |> cleanup_list()
   end
 
@@ -20,7 +22,7 @@ defmodule NewsUtil do
     document
     |> Floki.attribute("a", "href")
     |> List.flatten()
-    |> Enum.map(&URI.parse/1)
+    |> map(&URI.parse/1)
   end
 
 
@@ -36,8 +38,8 @@ defmodule NewsUtil do
 
   defp cleanup_list(list) do
     list
-    |> Enum.sort()
-    |> Enum.uniq()
+    |> sort()
+    |> uniq()
   end
 
 
@@ -47,8 +49,8 @@ defmodule NewsUtil do
     |> List.last()
     |> String.replace("_", " ")
     |> String.split(" ")
-    |> Enum.map(&String.capitalize/1)
-    |> Enum.join(" ")
+    |> map(&String.capitalize/1)
+    |> join(" ")
   end
 
 
