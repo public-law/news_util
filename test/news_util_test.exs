@@ -2,12 +2,8 @@ defmodule NewsUtilTest do
   use ExUnit.Case
   doctest NewsUtil
 
-  def fixture_path(name) do
-    Path.join("test/fixtures", name)
-  end
-
   def fixture(name) do
-    fixture_path(name)
+    Path.join("test/fixtures", name)
   end
 
 
