@@ -4,10 +4,19 @@ import CalCodes
 
 
 defmodule NewsUtil do
-  @spec find_citations(binary()) :: list()
+
   @doc """
-  Find citations in a string of HTML.
+  Find citations in a string of HTML or from a URL.
   """
+  @spec find_citations(binary() | URI.t()) :: list()
+  def find_citations(%URI{} = url) do
+    url
+    |> URI.to_string()
+    |> HTTPoison.get!()
+    |> Map.fetch!(:body)
+    |> find_citations()
+  end
+
   def find_citations(html) when is_binary(html) do
     html
     |> uri_list()
