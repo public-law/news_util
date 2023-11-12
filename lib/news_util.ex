@@ -1,11 +1,6 @@
 import CalCodes
 
 defmodule NewsUtil do
-  @moduledoc """
-  Documentation for `NewsUtil`.
-  """
-
-
   @spec find_citations(binary()) :: list()
   @doc """
   Find citations in a string of HTML.
