@@ -28,6 +28,18 @@ defmodule NewsUtil do
     leginfo_cites ++ texas_public_law_cites
   end
 
+  defp transform_or_pass_through(url) do
+    case url do
+      %{host: "leginfo.legislature.ca.gov"} ->
+        leginfo_url_to_cite(url)
+
+      %{host: "texas.public.law"} ->
+        texas_public_law_url_to_cite(url)
+
+      _ ->
+        url
+    end
+  end
 
   defp uri_list(html) do
     {:ok, document} = Floki.parse_document(html)
