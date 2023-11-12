@@ -11,17 +11,15 @@ defmodule NewsUtil do
   Find citations in a string of HTML.
   """
   def find_citations(html) do
-    {:ok, document} = Floki.parse_document(html)
-
     leginfo_cites =
-      document
+      html
       |> uri_list()
       |> Enum.filter(&leginfo_url?/1)
       |> Enum.map(&leginfo_url_to_cite/1)
       |> cleanup_list()
 
     texas_public_law_cites =
-      document
+      html
       |> uri_list()
       |> Enum.filter(&texas_public_law_url?/1)
       |> Enum.map(&texas_public_law_url_to_cite/1)
@@ -31,7 +29,9 @@ defmodule NewsUtil do
   end
 
 
-  defp uri_list(document) do
+  defp uri_list(html) do
+    {:ok, document} = Floki.parse_document(html)
+
     document
     |> Floki.attribute("a", "href")
     |> List.flatten()
