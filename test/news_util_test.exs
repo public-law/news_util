@@ -7,22 +7,24 @@ defmodule NewsUtilTest do
   end
 
   def fixture(name) do
-    File.read!(fixture_path(name))
+    fixture_path(name)
   end
 
 
   test "finds California citations when the leginfo links are standard" do
-    assert NewsUtil.find_citations(file: fixture_path("qandasec5.asp")) == ["CA Educ Code Section 47605", "CA Educ Code Section 47605.6"]
+    filename = fixture("qandasec5.asp")
+    assert NewsUtil.find_citations(file: filename) == ["CA Educ Code Section 47605", "CA Educ Code Section 47605.6"]
   end
 
   test "finds California citations when the leginfo links have reversed params" do
-    html = fixture("qandasec6.asp")
-    assert NewsUtil.find_citations(html) == ["CA Educ Code Section 47605"]
+    filename = fixture("qandasec6.asp")
+    assert NewsUtil.find_citations(file: filename) == ["CA Educ Code Section 47605"]
   end
 
   test "finds Texas citations when they're in public.law links" do
-    html = fixture("Formal Marriage License | Fort Bend County.html")
-    assert NewsUtil.find_citations(html) == [
+    filename = fixture("Formal Marriage License | Fort Bend County.html")
+
+    assert NewsUtil.find_citations(file: filename) == [
       "Tex. Fam. Code Section 2.003",
       "Tex. Fam. Code Section 2.013",
       "Tex. Fam. Code Section 2.203",
