@@ -13,33 +13,32 @@ defmodule NewsUtil do
   def find_citations(html) do
     {:ok, document} = Floki.parse_document(html)
 
-    leginfo_urls =
+    leginfo_cites =
       document
       |> Floki.attribute("a", "href")
       |> List.flatten()
       |> Enum.map(&URI.parse/1)
       |> Enum.filter(&leginfo_url?/1)
-
-    leginfo_cites =
-      leginfo_urls
       |> Enum.map(&leginfo_url_to_cite/1)
-      |> Enum.sort()
-      |> Enum.uniq()
+      |> cleanup_list()
 
-    texas_public_law_urls =
+    texas_public_law_cites =
       document
       |> Floki.attribute("a", "href")
       |> List.flatten()
       |> Enum.map(&URI.parse/1)
       |> Enum.filter(&texas_public_law_url?/1)
-
-    texas_public_law_cites =
-      texas_public_law_urls
       |> Enum.map(&texas_public_law_url_to_cite/1)
-      |> Enum.sort()
-      |> Enum.uniq()
+      |> cleanup_list()
 
     leginfo_cites ++ texas_public_law_cites
+  end
+
+
+  defp cleanup_list(list) do
+    list
+    |> Enum.sort()
+    |> Enum.uniq()
   end
 
 
