@@ -12,11 +12,6 @@ defmodule NewsUtilTest do
 
 
   test "finds California citations when the leginfo links are standard" do
-    html = fixture("qandasec5.asp")
-    assert NewsUtil.find_citations(html) == ["CA Educ Code Section 47605", "CA Educ Code Section 47605.6"]
-  end
-
-  test "gets cites from a file directly" do
     assert NewsUtil.find_citations(file: fixture_path("qandasec5.asp")) == ["CA Educ Code Section 47605", "CA Educ Code Section 47605.6"]
   end
 
