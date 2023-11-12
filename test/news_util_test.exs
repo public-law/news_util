@@ -9,17 +9,17 @@ defmodule NewsUtilTest do
   end
 
 
-  test "finds California citations when the leginfo links are standard" do
+  test "California citations when the leginfo links are standard" do
     filename = fixture("qandasec5.asp")
     assert find_citations(file: filename) == ["CA Educ Code Section 47605", "CA Educ Code Section 47605.6"]
   end
 
-  test "finds California citations when the leginfo links have reversed params" do
+  test "California citations when the leginfo links have reversed params" do
     filename = fixture("qandasec6.asp")
     assert find_citations(file: filename) == ["CA Educ Code Section 47605"]
   end
 
-  test "finds Texas citations when they're in public.law links" do
+  test "Texas citations when they're in public.law links" do
     filename = fixture("Formal Marriage License | Fort Bend County.html")
 
     assert find_citations(file: filename) == [
