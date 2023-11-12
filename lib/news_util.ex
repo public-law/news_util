@@ -28,7 +28,7 @@ defmodule NewsUtil do
 
   def temp_file!(ext \\ "tmp") do
     dir  = System.tmp_dir!()
-    file = Integer.to_string(System.system_time()) <> "-" <> Integer.to_string(rand()) <> "." <> ext
+    file = "#{System.system_time()}-#{rand()}.#{ext}"
 
     Path.join(dir, file)
   end
