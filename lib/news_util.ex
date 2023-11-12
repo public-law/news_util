@@ -15,23 +15,27 @@ defmodule NewsUtil do
 
     leginfo_cites =
       document
-      |> Floki.attribute("a", "href")
-      |> List.flatten()
-      |> Enum.map(&URI.parse/1)
+      |> uri_list()
       |> Enum.filter(&leginfo_url?/1)
       |> Enum.map(&leginfo_url_to_cite/1)
       |> cleanup_list()
 
     texas_public_law_cites =
       document
-      |> Floki.attribute("a", "href")
-      |> List.flatten()
-      |> Enum.map(&URI.parse/1)
+      |> uri_list()
       |> Enum.filter(&texas_public_law_url?/1)
       |> Enum.map(&texas_public_law_url_to_cite/1)
       |> cleanup_list()
 
     leginfo_cites ++ texas_public_law_cites
+  end
+
+
+  defp uri_list(document) do
+    document
+    |> Floki.attribute("a", "href")
+    |> List.flatten()
+    |> Enum.map(&URI.parse/1)
   end
 
 
