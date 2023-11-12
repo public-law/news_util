@@ -8,13 +8,17 @@ defmodule NewsUtil do
   @doc """
   Find citations in a string of HTML or from a URL.
   """
-  @spec find_citations(binary() | URI.t()) :: list()
-  def find_citations(%URI{} = url) do
-    url
-    |> URI.to_string()
-    |> HTTPoison.get!()
-    |> Map.fetch!(:body)
-    |> find_citations()
+  def find_citations(%URI{} = uri) do
+    url       = URI.to_string(uri)
+    temp_file = tmp_file!(url)
+    response  = HTTPoison.get!(url)
+    File.write!(temp_file, response.body)
+
+    find_citations(file_path: temp_file)
+  end
+
+  def find_citations(file_path: file_path) do
+    find_citations(File.read!(file_path))
   end
 
   def find_citations(html) when is_binary(html) do
@@ -26,9 +30,11 @@ defmodule NewsUtil do
   end
 
 
-  def temp_file!(ext \\ "tmp") do
+  @spec tmp_file!(binary()) :: binary()
+  def tmp_file!(ext_to_match \\ "tempfile.tmp") do
+    ext  = Path.extname(ext_to_match)
     dir  = System.tmp_dir!()
-    file = "#{System.system_time()}-#{rand()}.#{ext}"
+    file = "#{System.system_time()}-#{rand()}#{ext}"
 
     Path.join(dir, file)
   end
