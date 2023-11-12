@@ -27,11 +27,15 @@ defmodule NewsUtil do
 
 
   def temp_file!(ext \\ "tmp") do
-    dir       = System.tmp_dir!()
-    file      = Integer.to_string(System.system_time()) <> "." <> ext
-    full_path = Path.join(dir, file)
+    dir  = System.tmp_dir!()
+    file = Integer.to_string(System.system_time()) <> "-" <> Integer.to_string(rand()) <> "." <> ext
 
-    %{dir: dir, file: file, full_path: full_path}
+    Path.join(dir, file)
+  end
+
+
+  defp rand() do
+    :rand.uniform(10000000000000)
   end
 
 
