@@ -14,10 +14,10 @@ defmodule NewsUtil do
     response  = HTTPoison.get!(url)
     File.write!(temp_file, response.body)
 
-    find_citations(file_path: temp_file)
+    find_citations(file: temp_file)
   end
 
-  def find_citations(file_path: file_path) do
+  def find_citations(file: file_path) do
     find_citations(File.read!(file_path))
   end
 

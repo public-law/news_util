@@ -17,7 +17,7 @@ defmodule NewsUtilTest do
   end
 
   test "gets cites from a file directly" do
-    assert NewsUtil.find_citations(file_path: fixture_path("qandasec5.asp")) == ["CA Educ Code Section 47605", "CA Educ Code Section 47605.6"]
+    assert NewsUtil.find_citations(file: fixture_path("qandasec5.asp")) == ["CA Educ Code Section 47605", "CA Educ Code Section 47605.6"]
   end
 
   test "finds California citations when the leginfo links have reversed params" do
