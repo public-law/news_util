@@ -26,8 +26,12 @@ defmodule NewsUtil do
   end
 
 
-  def temp_file!() do
-    System.tmp_dir!() <> Integer.to_string(System.system_time())
+  def temp_file!(ext \\ "tmp") do
+    dir       = System.tmp_dir!()
+    file      = Integer.to_string(System.system_time()) <> "." <> ext
+    full_path = Path.join(dir, file)
+
+    %{dir: dir, file: file, full_path: full_path}
   end
 
 
