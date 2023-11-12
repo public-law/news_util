@@ -11,24 +11,15 @@ defmodule NewsUtil do
   Find citations in a string of HTML.
   """
   def find_citations(html) do
-    leginfo_cites =
-      html
-      |> uri_list()
-      |> Enum.filter(&leginfo_url?/1)
-      |> Enum.map(&leginfo_url_to_cite/1)
-      |> cleanup_list()
-
-    texas_public_law_cites =
-      html
-      |> uri_list()
-      |> Enum.filter(&texas_public_law_url?/1)
-      |> Enum.map(&texas_public_law_url_to_cite/1)
-      |> cleanup_list()
-
-    leginfo_cites ++ texas_public_law_cites
+    html
+    |> uri_list()
+    |> Enum.map(&transform/1)
+    |> Enum.filter(&is_binary/1)
+    |> cleanup_list()
   end
 
-  defp transform_or_pass_through(url) do
+
+  defp transform(url) do
     case url do
       %{host: "leginfo.legislature.ca.gov"} ->
         leginfo_url_to_cite(url)
@@ -37,9 +28,10 @@ defmodule NewsUtil do
         texas_public_law_url_to_cite(url)
 
       _ ->
-        url
+        nil
     end
   end
+
 
   defp uri_list(html) do
     {:ok, document} = Floki.parse_document(html)
@@ -58,9 +50,6 @@ defmodule NewsUtil do
   end
 
 
-  defp texas_public_law_url?(%{host: "texas.public.law"}), do: true
-  defp texas_public_law_url?(_),  do: false
-
   defp texas_public_law_url_to_cite(%{path: path}) do
     path
     |> String.split("/")
@@ -71,10 +60,6 @@ defmodule NewsUtil do
     |> Enum.join(" ")
   end
 
-
-
-  defp leginfo_url?(%{host: "leginfo.legislature.ca.gov"}), do: true
-  defp leginfo_url?(_),  do: false
 
   defp leginfo_url_to_cite(%{query: query}) do
     query
