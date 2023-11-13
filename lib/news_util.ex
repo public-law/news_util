@@ -70,7 +70,7 @@ defmodule NewsUtil do
   end
 
 
-  @spec cleanup_list(any()) :: list()
+  @spec cleanup_list(any) :: list
   defp cleanup_list(list) do
     list
     |> sort()
