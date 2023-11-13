@@ -19,7 +19,7 @@ defmodule NewsUtil do
 
   def find_citations(file: path) do
     case Path.extname(path) do
-      ".pdf" -> ["TODO: Convert PDF to HTML"]
+      ".pdf" -> find_citations(read_pdf_as_html!(path))
       _      -> find_citations(File.read!(path))
     end
   end
@@ -31,6 +31,14 @@ defmodule NewsUtil do
     |> filter(&is_binary/1)
     |> cleanup_list()
   end
+
+
+  def read_pdf_as_html!(input_file) do
+    html_temp_file = tmp_file!("tempfile.html")
+    :os.cmd(String.to_charlist("mutool convert -o #{html_temp_file} #{input_file}"))
+    File.read!(html_temp_file)
+  end
+
 
 
   @spec tmp_file!(binary()) :: binary()
