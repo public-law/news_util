@@ -41,12 +41,12 @@ defmodule NewsUtil do
   end
 
 
+  @spec read_pdf_as_html!(any()) :: binary()
   def read_pdf_as_html!(input_file) do
     html_temp_file = tmp_file!("tempfile.html")
     :os.cmd(String.to_charlist("mutool convert -o #{html_temp_file} #{input_file}"))
     File.read!(html_temp_file)
   end
-
 
 
   @spec tmp_file!(binary()) :: binary()
@@ -59,12 +59,14 @@ defmodule NewsUtil do
   end
 
 
-  defp rand() do
+  @spec rand() :: pos_integer()
+  def rand() do
     :rand.uniform(10000000000000)
   end
 
 
-  defp uri_list(html) when is_binary(html) do
+  @spec uri_list(binary()) :: list()
+  def uri_list(html) when is_binary(html) do
     {:ok, document} = Floki.parse_document(html)
 
     document
@@ -74,7 +76,8 @@ defmodule NewsUtil do
   end
 
 
-  defp transform(%URI{} = url) do
+  @spec transform(URI.t()) :: nil | binary()
+  def transform(%URI{} = url) do
     case url do
       %{host: "leginfo.legislature.ca.gov"} -> leginfo_url_to_cite(url)
       %{host: "texas.public.law"}           -> texas_public_law_url_to_cite(url)
@@ -84,14 +87,16 @@ defmodule NewsUtil do
   end
 
 
-  defp cleanup_list(list) do
+  @spec cleanup_list(any()) :: list()
+  def cleanup_list(list) do
     list
     |> sort()
     |> uniq()
   end
 
 
-  defp texas_public_law_url_to_cite(%URI{path: path}) do
+  @spec texas_public_law_url_to_cite(URI.t()) :: binary()
+  def texas_public_law_url_to_cite(%URI{path: path}) do
     path
     |> String.split("/")
     |> last()
@@ -102,14 +107,16 @@ defmodule NewsUtil do
   end
 
 
-  defp leginfo_url_to_cite(%URI{query: query}) do
+  @spec leginfo_url_to_cite(URI.t()) :: binary()
+  def leginfo_url_to_cite(%URI{query: query}) do
     query
     |> URI.decode_query()
     |> make_cite_to_cal_codes()
   end
 
 
-  defp make_cite_to_cal_codes(%{"lawCode" => code, "sectionNum" => section}) do
+  @spec make_cite_to_cal_codes(map()) :: binary()
+  def make_cite_to_cal_codes(%{"lawCode" => code, "sectionNum" => section}) do
     "CA #{code_to_abbrev(code)} Section #{section}"
     |> String.replace_suffix(".", "")
   end
