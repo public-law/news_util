@@ -64,6 +64,7 @@ defmodule NewsUtil do
     case url do
       %{host: "leginfo.legislature.ca.gov"} -> leginfo_url_to_cite(url)
       %{host: "texas.public.law"}           -> texas_public_law_url_to_cite(url)
+      %{host: "newyork.public.law"}         -> newyork_public_law_url_to_cite(url)
 
       _ -> nil
     end
@@ -87,6 +88,19 @@ defmodule NewsUtil do
     |> String.split(" ")
     |> map(&String.capitalize/1)
     |> join(" ")
+  end
+
+
+  @spec newyork_public_law_url_to_cite(URI.t()) :: binary()
+  def newyork_public_law_url_to_cite(%URI{path: path}) do
+    path
+    |> String.split("/")
+    |> last()
+    |> String.replace("_", " ")
+    |> String.split(" ")
+    |> map(&String.capitalize/1)
+    |> join(" ")
+    |> String.replace("N.y.", "N.Y.")
   end
 
 
