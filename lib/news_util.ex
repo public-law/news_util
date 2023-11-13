@@ -34,7 +34,7 @@ defmodule NewsUtil do
   defp find_citations_in_html(html) do
     cites_from_hrefs =
       html
-      |> uri_list()
+      |> hrefs()
       |> map(&transform/1)
       |> filter(&is_binary/1)
       |> cleanup_list()
@@ -48,8 +48,8 @@ defmodule NewsUtil do
   end
 
 
-  @spec uri_list(binary) :: [URI.t]
-  defp uri_list(html) do
+  @spec hrefs(binary) :: [URI.t]
+  defp hrefs(html) do
     {:ok, document} = Floki.parse_document(html)
 
     document
