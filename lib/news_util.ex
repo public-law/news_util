@@ -48,7 +48,7 @@ defmodule NewsUtil do
   end
 
 
-  @spec uri_list(binary()) :: list()
+  @spec uri_list(binary()) :: [URI.t]
   defp uri_list(html) when is_binary(html) do
     {:ok, document} = Floki.parse_document(html)
 
