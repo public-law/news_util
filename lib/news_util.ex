@@ -60,7 +60,7 @@ defmodule NewsUtil do
 
 
   @spec transform(URI.t) :: nil | binary
-  def transform(%URI{} = url) do
+  defp transform(%URI{} = url) do
     case url do
       %{host: "leginfo.legislature.ca.gov"} -> leginfo_url_to_cite(url)
       %{host: "newyork.public.law"}         -> public_law_url_to_cite(url)
@@ -70,7 +70,7 @@ defmodule NewsUtil do
   end
 
 
-  @spec cleanup_list(any) :: list
+  @spec cleanup_list(list) :: list
   defp cleanup_list(list) do
     list
     |> sort()
@@ -99,7 +99,7 @@ defmodule NewsUtil do
   end
 
 
-  @spec make_cite_to_cal_codes(map()) :: binary
+  @spec make_cite_to_cal_codes(map) :: binary
   defp make_cite_to_cal_codes(%{"lawCode" => code, "sectionNum" => section}) do
     "CA #{code_to_abbrev(code)} Section #{section}"
     |> String.replace_suffix(".", "")
