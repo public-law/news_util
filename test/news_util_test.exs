@@ -1,6 +1,7 @@
 import NewsUtil
 
 defmodule NewsUtilTest do
+  @moduledoc false
   use ExUnit.Case
   doctest NewsUtil
 
@@ -14,10 +15,12 @@ defmodule NewsUtilTest do
     assert find_citations_in_file(filename) == ["CA Educ Code Section 47605", "CA Educ Code Section 47605.6"]
   end
 
+
   test "California citations when the leginfo links have reversed params" do
     filename = fixture("qandasec6.asp")
     assert find_citations_in_file(filename) == ["CA Educ Code Section 47605"]
   end
+
 
   test "Texas citations when they're in public.law links" do
     filename = fixture("Formal Marriage License | Fort Bend County.html")
@@ -29,6 +32,7 @@ defmodule NewsUtilTest do
     ]
   end
 
+
   test "Colorado CRS citations in a PDF" do
     filename = fixture("JDF432.pdf")
 
@@ -37,6 +41,7 @@ defmodule NewsUtilTest do
       "C.R.S. 13-15-102",
     ]
   end
+
 
   test "NY citations in HTML" do
     filename = fixture("Potential expulsions for SUNY and CUNY students convicted of hate crimes, amidst surge in antisemitic incidents _ WRGB.html")

@@ -63,9 +63,8 @@ defmodule NewsUtil do
   def transform(%URI{} = url) do
     case url do
       %{host: "leginfo.legislature.ca.gov"} -> leginfo_url_to_cite(url)
-      %{host: "texas.public.law"}           -> texas_public_law_url_to_cite(url)
-      %{host: "newyork.public.law"}         -> newyork_public_law_url_to_cite(url)
-
+      %{host: "texas.public.law"}           -> public_law_url_to_cite(url)
+      %{host: "newyork.public.law"}         -> public_law_url_to_cite(url)
       _ -> nil
     end
   end
@@ -76,19 +75,6 @@ defmodule NewsUtil do
     list
     |> sort()
     |> uniq()
-  end
-
-
-  @spec texas_public_law_url_to_cite(URI.t()) :: binary()
-  def texas_public_law_url_to_cite(%URI{path: path}) do
-    public_law_url_to_cite(%URI{path: path})
-  end
-
-
-  @spec newyork_public_law_url_to_cite(URI.t()) :: binary()
-  def newyork_public_law_url_to_cite(%URI{path: path}) do
-    public_law_url_to_cite(%URI{path: path})
-    |> String.replace("N.y.", "N.Y.")
   end
 
 
@@ -104,6 +90,7 @@ defmodule NewsUtil do
     |> String.split(" ")
     |> map(&String.capitalize/1)
     |> join(" ")
+    |> String.replace("N.y.", "N.Y.")
   end
 
 
