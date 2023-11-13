@@ -10,7 +10,7 @@ defmodule NewsUtil do
   @doc """
   Find citations in a string of HTML or from a URL.
   """
-  @spec find_citations(URI.t()) :: list()
+  @spec find_citations(URI.t()) :: [binary()]
   def find_citations(%URI{} = uri) do
     url       = URI.to_string(uri)
     temp_file = FileUtil.tmp_file!(url)
@@ -21,7 +21,7 @@ defmodule NewsUtil do
   end
 
 
-  @spec find_citations_in_file(binary()) :: list()
+  @spec find_citations_in_file(binary()) :: [binary()]
   def find_citations_in_file(path) do
     case Path.extname(path) do
       ".pdf" -> find_citations_in_html(FileUtil.read_pdf_as_html!(path))
@@ -30,7 +30,7 @@ defmodule NewsUtil do
   end
 
 
-  @spec find_citations_in_html(binary()) :: list()
+  @spec find_citations_in_html(binary()) :: [binary()]
   defp find_citations_in_html(html) when is_binary(html) do
     cites_from_hrefs =
       html
