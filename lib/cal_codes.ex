@@ -1,4 +1,8 @@
 defmodule CalCodes do
+  @moduledoc """
+  A module for California leginfo URLs.
+  """
+
   @cal_codes %{
     "CONS" => "Constitution",
     "BPC" => "Business and Professions Code",
@@ -64,6 +68,7 @@ defmodule CalCodes do
   Given a California leginfo code,
   return its Public.Law abbreviation.
   """
+  @spec code_to_abbrev(binary()) :: binary()
   def code_to_abbrev(code) do
     @code_abbrevs[@cal_codes[code]]
   end

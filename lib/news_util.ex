@@ -4,27 +4,34 @@ import CalCodes
 
 
 defmodule NewsUtil do
+  @moduledoc false
+
 
   @doc """
   Find citations in a string of HTML or from a URL.
   """
+  @spec find_citations(URI.t()) :: list()
   def find_citations(%URI{} = uri) do
     url       = URI.to_string(uri)
-    temp_file = tmp_file!(url)
+    temp_file = FileUtil.tmp_file!(url)
     response  = HTTPoison.get!(url)
     File.write!(temp_file, response.body)
 
-    find_citations(file: temp_file)
+    find_citations_in_file(temp_file)
   end
 
-  def find_citations(file: path) do
+
+  @spec find_citations_in_file(binary()) :: list()
+  def find_citations_in_file(path) do
     case Path.extname(path) do
-      ".pdf" -> find_citations(read_pdf_as_html!(path))
-      _      -> find_citations(File.read!(path))
+      ".pdf" -> find_citations_in_html(FileUtil.read_pdf_as_html!(path))
+      _      -> find_citations_in_html(File.read!(path))
     end
   end
 
-  def find_citations(html) when is_binary(html) do
+
+  @spec find_citations_in_html(binary()) :: list()
+  defp find_citations_in_html(html) when is_binary(html) do
     cites_from_hrefs =
       html
       |> uri_list()
@@ -38,30 +45,6 @@ defmodule NewsUtil do
       end
 
      cites_from_hrefs  ++ cites_from_text
-  end
-
-
-  @spec read_pdf_as_html!(any()) :: binary()
-  def read_pdf_as_html!(input_file) do
-    html_temp_file = tmp_file!("tempfile.html")
-    :os.cmd(String.to_charlist("mutool convert -o #{html_temp_file} #{input_file}"))
-    File.read!(html_temp_file)
-  end
-
-
-  @spec tmp_file!(binary()) :: binary()
-  def tmp_file!(ext_to_match \\ "tempfile.tmp") do
-    ext  = Path.extname(ext_to_match)
-    dir  = System.tmp_dir!()
-    file = "#{System.system_time()}-#{rand()}#{ext}"
-
-    Path.join(dir, file)
-  end
-
-
-  @spec rand() :: pos_integer()
-  def rand() do
-    :rand.uniform(10000000000000)
   end
 
 

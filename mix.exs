@@ -25,7 +25,8 @@ defmodule NewsUtil.MixProject do
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
       {:httpoison, "> 0.0.0"},
       {:floki, "> 0.0.0"},
-      {:dialyxir, "> 0.0.0", only: [:dev], runtime: false}
+      {:dialyxir, "> 0.0.0", only: [:dev], runtime: false},
+      {:credo, "> 0.0.0", only: [:dev], runtime: false},
     ]
   end
 end
