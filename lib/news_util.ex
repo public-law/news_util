@@ -18,7 +18,10 @@ defmodule NewsUtil do
   end
 
   def find_citations(file: file_path) do
-    find_citations(File.read!(file_path))
+    case Path.extname(file_path) do
+      ".pdf" -> ["TODO: Convert PDF to HTML"]
+        _    -> find_citations(File.read!(file_path))
+    end
   end
 
   def find_citations(html) when is_binary(html) do
