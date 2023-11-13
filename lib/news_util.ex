@@ -4,6 +4,8 @@ import CalCodes
 
 
 defmodule NewsUtil do
+  @moduledoc false
+
 
   @doc """
   Find citations in a string of HTML or from a URL.
@@ -44,7 +46,7 @@ defmodule NewsUtil do
   @spec read_pdf_as_html!(any()) :: binary()
   def read_pdf_as_html!(input_file) do
     html_temp_file = tmp_file!("tempfile.html")
-    :os.cmd(String.to_charlist("mutool convert -o #{html_temp_file} #{input_file}"))
+    System.cmd("mutool", ["convert", "-o", html_temp_file, input_file])
     File.read!(html_temp_file)
   end
 

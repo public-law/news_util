@@ -1,4 +1,8 @@
 defmodule CalCodes do
+  @moduledoc """
+  A module for California leginfo URLs.
+  """
+
   @cal_codes %{
     "CONS" => "Constitution",
     "BPC" => "Business and Professions Code",
