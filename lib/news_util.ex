@@ -10,7 +10,7 @@ defmodule NewsUtil do
   @doc """
   Find citations in a string of HTML or from a URL.
   """
-  @spec find_citations(URI.t()) :: [binary()]
+  @spec find_citations(URI.t) :: [binary]
   def find_citations(%URI{} = uri) do
     url       = URI.to_string(uri)
     temp_file = FileUtil.tmp_file!(url)
@@ -21,7 +21,7 @@ defmodule NewsUtil do
   end
 
 
-  @spec find_citations_in_file(binary()) :: [binary()]
+  @spec find_citations_in_file(binary) :: [binary]
   def find_citations_in_file(path) do
     case Path.extname(path) do
       ".pdf" -> find_citations_in_html(FileUtil.read_pdf_as_html!(path))
@@ -30,7 +30,7 @@ defmodule NewsUtil do
   end
 
 
-  @spec find_citations_in_html(binary()) :: [binary()]
+  @spec find_citations_in_html(binary) :: [binary]
   defp find_citations_in_html(html) when is_binary(html) do
     cites_from_hrefs =
       html
@@ -48,7 +48,7 @@ defmodule NewsUtil do
   end
 
 
-  @spec uri_list(binary()) :: [URI.t]
+  @spec uri_list(binary) :: [URI.t]
   defp uri_list(html) when is_binary(html) do
     {:ok, document} = Floki.parse_document(html)
 
@@ -59,7 +59,7 @@ defmodule NewsUtil do
   end
 
 
-  @spec transform(URI.t()) :: nil | binary()
+  @spec transform(URI.t) :: nil | binary
   def transform(%URI{} = url) do
     case url do
       %{host: "leginfo.legislature.ca.gov"} -> leginfo_url_to_cite(url)
@@ -78,7 +78,7 @@ defmodule NewsUtil do
   end
 
 
-  @spec public_law_url_to_cite(URI.t()) :: binary()
+  @spec public_law_url_to_cite(URI.t) :: binary
   defp public_law_url_to_cite(%URI{path: path}) do
     path
     |> String.split("/")
@@ -91,7 +91,7 @@ defmodule NewsUtil do
   end
 
 
-  @spec leginfo_url_to_cite(URI.t()) :: binary()
+  @spec leginfo_url_to_cite(URI.t) :: binary
   defp leginfo_url_to_cite(%URI{query: query}) do
     query
     |> URI.decode_query()
@@ -99,7 +99,7 @@ defmodule NewsUtil do
   end
 
 
-  @spec make_cite_to_cal_codes(map()) :: binary()
+  @spec make_cite_to_cal_codes(map()) :: binary
   defp make_cite_to_cal_codes(%{"lawCode" => code, "sectionNum" => section}) do
     "CA #{code_to_abbrev(code)} Section #{section}"
     |> String.replace_suffix(".", "")
