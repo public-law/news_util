@@ -22,7 +22,7 @@ defmodule NewsUtilTest do
   end
 
 
-  test "Texas citations when they're in public.law links" do
+  test "Texas links to public.law" do
     filename = fixture("Formal Marriage License | Fort Bend County.html")
 
     assert find_citations_in_file(filename) == [
@@ -33,7 +33,7 @@ defmodule NewsUtilTest do
   end
 
 
-  test "Colorado CRS citations in a PDF" do
+  test "Colorado plain-text CRS citations in a PDF" do
     filename = fixture("JDF432.pdf")
 
     assert find_citations_in_file(filename) == [
@@ -43,7 +43,7 @@ defmodule NewsUtilTest do
   end
 
 
-  test "NY citations in HTML" do
+  test "NY links to public.law" do
     filename = fixture("Potential expulsions for SUNY and CUNY students convicted of hate crimes, amidst surge in antisemitic incidents _ WRGB.html")
 
     assert find_citations_in_file(filename) == [
