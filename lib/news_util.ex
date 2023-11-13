@@ -10,7 +10,7 @@ defmodule NewsUtil do
   @doc """
   Find citations in a string of HTML or from a URL.
   """
-  @spec find_citations(URI.t()) :: list()
+  @spec find_citations(URI.t) :: [binary]
   def find_citations(%URI{} = uri) do
     url       = URI.to_string(uri)
     temp_file = FileUtil.tmp_file!(url)
@@ -21,7 +21,7 @@ defmodule NewsUtil do
   end
 
 
-  @spec find_citations_in_file(binary()) :: list()
+  @spec find_citations_in_file(binary) :: [binary]
   def find_citations_in_file(path) do
     case Path.extname(path) do
       ".pdf" -> find_citations_in_html(FileUtil.read_pdf_as_html!(path))
@@ -30,8 +30,8 @@ defmodule NewsUtil do
   end
 
 
-  @spec find_citations_in_html(binary()) :: list()
-  defp find_citations_in_html(html) when is_binary(html) do
+  @spec find_citations_in_html(binary) :: [binary]
+  defp find_citations_in_html(html) do
     cites_from_hrefs =
       html
       |> uri_list()
@@ -48,8 +48,8 @@ defmodule NewsUtil do
   end
 
 
-  @spec uri_list(binary()) :: list()
-  def uri_list(html) when is_binary(html) do
+  @spec uri_list(binary) :: [URI.t]
+  defp uri_list(html) do
     {:ok, document} = Floki.parse_document(html)
 
     document
@@ -59,27 +59,27 @@ defmodule NewsUtil do
   end
 
 
-  @spec transform(URI.t()) :: nil | binary()
-  def transform(%URI{} = url) do
+  @spec transform(URI.t) :: nil | binary
+  defp transform(%URI{} = url) do
     case url do
       %{host: "leginfo.legislature.ca.gov"} -> leginfo_url_to_cite(url)
-      %{host: "texas.public.law"}           -> texas_public_law_url_to_cite(url)
-
+      %{host: "newyork.public.law"}         -> public_law_url_to_cite(url)
+      %{host: "texas.public.law"}           -> public_law_url_to_cite(url)
       _ -> nil
     end
   end
 
 
-  @spec cleanup_list(any()) :: list()
-  def cleanup_list(list) do
+  @spec cleanup_list(list) :: list
+  defp cleanup_list(list) do
     list
     |> sort()
     |> uniq()
   end
 
 
-  @spec texas_public_law_url_to_cite(URI.t()) :: binary()
-  def texas_public_law_url_to_cite(%URI{path: path}) do
+  @spec public_law_url_to_cite(URI.t) :: binary
+  defp public_law_url_to_cite(%URI{path: path}) do
     path
     |> String.split("/")
     |> last()
@@ -87,19 +87,20 @@ defmodule NewsUtil do
     |> String.split(" ")
     |> map(&String.capitalize/1)
     |> join(" ")
+    |> String.replace("N.y.", "N.Y.")
   end
 
 
-  @spec leginfo_url_to_cite(URI.t()) :: binary()
-  def leginfo_url_to_cite(%URI{query: query}) do
+  @spec leginfo_url_to_cite(URI.t) :: binary
+  defp leginfo_url_to_cite(%URI{query: query}) do
     query
     |> URI.decode_query()
     |> make_cite_to_cal_codes()
   end
 
 
-  @spec make_cite_to_cal_codes(map()) :: binary()
-  def make_cite_to_cal_codes(%{"lawCode" => code, "sectionNum" => section}) do
+  @spec make_cite_to_cal_codes(map) :: binary
+  defp make_cite_to_cal_codes(%{"lawCode" => code, "sectionNum" => section}) do
     "CA #{code_to_abbrev(code)} Section #{section}"
     |> String.replace_suffix(".", "")
   end
