@@ -88,7 +88,7 @@ defmodule NewsUtil do
   @spec newyork_public_law_url_to_cite(URI.t()) :: binary()
   def newyork_public_law_url_to_cite(%URI{path: path}) do
     public_law_url_to_cite(%URI{path: path})
-    |> String.replace("N Y", "N.Y.")
+    |> String.replace("N.y.", "N.Y.")
   end
 
 
