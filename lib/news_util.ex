@@ -49,7 +49,7 @@ defmodule NewsUtil do
 
 
   @spec uri_list(binary()) :: list()
-  def uri_list(html) when is_binary(html) do
+  defp uri_list(html) when is_binary(html) do
     {:ok, document} = Floki.parse_document(html)
 
     document
@@ -63,26 +63,23 @@ defmodule NewsUtil do
   def transform(%URI{} = url) do
     case url do
       %{host: "leginfo.legislature.ca.gov"} -> leginfo_url_to_cite(url)
-      %{host: "texas.public.law"}           -> public_law_url_to_cite(url)
       %{host: "newyork.public.law"}         -> public_law_url_to_cite(url)
+      %{host: "texas.public.law"}           -> public_law_url_to_cite(url)
       _ -> nil
     end
   end
 
 
   @spec cleanup_list(any()) :: list()
-  def cleanup_list(list) do
+  defp cleanup_list(list) do
     list
     |> sort()
     |> uniq()
   end
 
 
-  @doc """
-  Convert most public.law URLs to citations.
-  """
   @spec public_law_url_to_cite(URI.t()) :: binary()
-  def public_law_url_to_cite(%URI{path: path}) do
+  defp public_law_url_to_cite(%URI{path: path}) do
     path
     |> String.split("/")
     |> last()
@@ -95,7 +92,7 @@ defmodule NewsUtil do
 
 
   @spec leginfo_url_to_cite(URI.t()) :: binary()
-  def leginfo_url_to_cite(%URI{query: query}) do
+  defp leginfo_url_to_cite(%URI{query: query}) do
     query
     |> URI.decode_query()
     |> make_cite_to_cal_codes()
@@ -103,7 +100,7 @@ defmodule NewsUtil do
 
 
   @spec make_cite_to_cal_codes(map()) :: binary()
-  def make_cite_to_cal_codes(%{"lawCode" => code, "sectionNum" => section}) do
+  defp make_cite_to_cal_codes(%{"lawCode" => code, "sectionNum" => section}) do
     "CA #{code_to_abbrev(code)} Section #{section}"
     |> String.replace_suffix(".", "")
   end
