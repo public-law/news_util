@@ -31,7 +31,7 @@ defmodule NewsUtil do
 
 
   @spec find_citations_in_html(binary) :: [binary]
-  defp find_citations_in_html(html) when is_binary(html) do
+  defp find_citations_in_html(html) do
     cites_from_hrefs =
       html
       |> uri_list()
@@ -49,7 +49,7 @@ defmodule NewsUtil do
 
 
   @spec uri_list(binary) :: [URI.t]
-  defp uri_list(html) when is_binary(html) do
+  defp uri_list(html) do
     {:ok, document} = Floki.parse_document(html)
 
     document
