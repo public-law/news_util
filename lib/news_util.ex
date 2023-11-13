@@ -17,10 +17,10 @@ defmodule NewsUtil do
     find_citations(file: temp_file)
   end
 
-  def find_citations(file: file_path) do
-    case Path.extname(file_path) do
+  def find_citations(file: path) do
+    case Path.extname(path) do
       ".pdf" -> ["TODO: Convert PDF to HTML"]
-        _    -> find_citations(File.read!(file_path))
+      _      -> find_citations(File.read!(path))
     end
   end
 
