@@ -25,11 +25,20 @@ defmodule NewsUtil do
   end
 
   def find_citations(html) when is_binary(html) do
-    html
-    |> uri_list()
-    |> map(&transform/1)
-    |> filter(&is_binary/1)
-    |> cleanup_list()
+    cites_from_hrefs =
+      html
+      |> uri_list()
+      |> map(&transform/1)
+      |> filter(&is_binary/1)
+      |> cleanup_list()
+
+    cites_from_text =
+      case Regex.run(~r/(C.R.S. &#xa7; \d+-\d+-\d+)/, html) do
+        nil -> []
+        list -> list |> map(fn m -> String.replace(m, "&#xa7; ", "", global: true) end)
+      end
+
+     cites_from_hrefs  ++ cites_from_text
   end
 
 
