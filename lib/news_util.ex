@@ -81,18 +81,22 @@ defmodule NewsUtil do
 
   @spec texas_public_law_url_to_cite(URI.t()) :: binary()
   def texas_public_law_url_to_cite(%URI{path: path}) do
-    path
-    |> String.split("/")
-    |> last()
-    |> String.replace("_", " ")
-    |> String.split(" ")
-    |> map(&String.capitalize/1)
-    |> join(" ")
+    public_law_url_to_cite(%URI{path: path})
   end
 
 
   @spec newyork_public_law_url_to_cite(URI.t()) :: binary()
   def newyork_public_law_url_to_cite(%URI{path: path}) do
+    public_law_url_to_cite(%URI{path: path})
+    |> String.replace("N Y", "N.Y.")
+  end
+
+
+  @doc """
+  Convert most public.law URLs to citations.
+  """
+  @spec public_law_url_to_cite(URI.t()) :: binary()
+  def public_law_url_to_cite(%URI{path: path}) do
     path
     |> String.split("/")
     |> last()
@@ -100,7 +104,6 @@ defmodule NewsUtil do
     |> String.split(" ")
     |> map(&String.capitalize/1)
     |> join(" ")
-    |> String.replace("N.y.", "N.Y.")
   end
 
 
