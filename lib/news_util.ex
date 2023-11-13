@@ -61,7 +61,7 @@ defmodule NewsUtil do
 
   @spec rand() :: pos_integer()
   def rand() do
-    :rand.uniform(10000000000000)
+    :rand.uniform(10_000_000_000_000)
   end
 
 
