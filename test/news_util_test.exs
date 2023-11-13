@@ -37,4 +37,12 @@ defmodule NewsUtilTest do
       "C.R.S. 13-15-102",
     ]
   end
+
+  test "NY citations in HTML" do
+    filename = fixture("Potential expulsions for SUNY and CUNY students convicted of hate crimes, amidst surge in antisemitic incidents _ WRGB.html")
+
+    assert find_citations_in_file(filename) == [
+      "N.Y. Penal Law Section 485.05"
+    ]
+  end
 end
