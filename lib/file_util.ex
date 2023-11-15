@@ -21,13 +21,6 @@ defmodule FileUtil do
   end
 
 
-  @spec http_get!(binary) :: binary
-  def http_get!(url) do
-    {output, 0} = System.cmd("curl", [url, "--silent"])
-    output
-  end
-
-
   @spec rand() :: pos_integer()
   def rand() do
     :rand.uniform(10_000_000_000_000)
