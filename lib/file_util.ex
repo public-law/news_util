@@ -21,6 +21,11 @@ defmodule FileUtil do
   end
 
 
+  def http_get!(url) do
+    HTTPoison.get!(url).body
+  end
+
+
   @spec rand() :: pos_integer()
   def rand() do
     :rand.uniform(10_000_000_000_000)
