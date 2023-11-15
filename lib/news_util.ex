@@ -2,7 +2,6 @@ import Enum
 import List
 
 import CalCodes
-import Http
 
 
 defmodule NewsUtil do
@@ -15,7 +14,7 @@ defmodule NewsUtil do
   def find_citations(%URI{} = uri) do
     url       = URI.to_string(uri)
     temp_file = FileUtil.tmp_file!(url)
-    File.write!(temp_file, get!(url))
+    File.write!(temp_file, Http.get!(url))
 
     find_citations_in_file(temp_file)
   end
