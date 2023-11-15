@@ -14,7 +14,7 @@ defmodule NewsUtil do
   def find_citations(%URI{} = uri) do
     url       = URI.to_string(uri)
     temp_file = FileUtil.tmp_file!(url)
-    response  = HTTPoison.get!(url)
+    response  = HTTPoison.get!(url, options: [ssl: [{:versions, [:"tlsv1.2"]}]])
     File.write!(temp_file, response.body)
 
     find_citations_in_file(temp_file)
