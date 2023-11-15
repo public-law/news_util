@@ -1,11 +1,11 @@
 import Enum
 import List
+
 import CalCodes
 
 
 defmodule NewsUtil do
   @moduledoc false
-
 
   @doc """
   Find citations in a string of HTML or from a URL.
@@ -14,8 +14,7 @@ defmodule NewsUtil do
   def find_citations(%URI{} = uri) do
     url       = URI.to_string(uri)
     temp_file = FileUtil.tmp_file!(url)
-    response  = HTTPoison.get!(url, options: [ssl: [{:versions, [:"tlsv1.2"]}]])
-    File.write!(temp_file, response.body)
+    File.write!(temp_file, Http.get!(url))
 
     find_citations_in_file(temp_file)
   end
