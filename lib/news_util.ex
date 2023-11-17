@@ -40,7 +40,6 @@ defmodule NewsUtil do
       Regex.scan(~r/(C.R.S. &#xa7;(&#xa7;)? \d+-\d+-\d+)/, html)
       |> flatten()
       |> map(fn m -> String.replace(m, ~r/&#xa7; ?/, "", global: true) end)
-      |> reject(&(String.length(&1) == 0))
 
     tx_cites_from_text =
       Regex.scan(~r/(Texas \w+ Code Section [\d\w.]+)/, html)
@@ -51,6 +50,7 @@ defmodule NewsUtil do
 
      (cites_from_hrefs ++ crs_cites_from_text ++ tx_cites_from_text)
      |> filter(&is_binary/1)
+     |> reject(&(String.length(&1) == 0))
      |> cleanup_list()
   end
 
