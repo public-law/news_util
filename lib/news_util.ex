@@ -48,7 +48,6 @@ defmodule NewsUtil do
         list ->
           list
           |> flatten()
-          |> uniq()
           |> map(fn m -> String.replace(m, "Texas ", "Tex. ", global: true) end)
           |> map(fn m -> String.replace(m, "Family ", "Fam. ", global: true) end)
           |> map(fn m -> String.replace(m, "Transportation ", "Transp. ", global: true) end)
