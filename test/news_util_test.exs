@@ -33,6 +33,16 @@ defmodule NewsUtilTest do
   end
 
 
+  test "Texas text cites" do
+    filename = fixture("ar-AA1h19am")
+
+    assert find_citations_in_file(filename) == [
+      "Tex. Penal Code Section 38.02",
+      "Tex. Transp. Code Section 521.025",
+    ]
+  end
+
+
   test "Colorado plain-text CRS citations in a PDF" do
     filename = fixture("JDF432.pdf")
 
