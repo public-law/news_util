@@ -39,7 +39,12 @@ defmodule NewsUtil do
 
     crs_cites_from_text =
       case Regex.scan(~r/(C.R.S. &#xa7;(&#xa7;)? \d+-\d+-\d+)/, html) do
-        list -> list |> flatten() |> uniq() |> map(fn m -> String.replace(m, ~r/&#xa7; ?/, "", global: true) end) |> reject(&(String.length(&1) == 0))
+        list ->
+          list
+          |> flatten()
+          |> uniq()
+          |> map(fn m -> String.replace(m, ~r/&#xa7; ?/, "", global: true) end)
+          |> reject(&(String.length(&1) == 0))
       end
 
     tx_cites_from_text =
