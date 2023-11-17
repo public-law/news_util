@@ -35,7 +35,7 @@ defmodule NewsUtilTest do
 
   @tag :focus
   test "Texas text cites" do
-    filename = fixture("ar-AA1h19am")
+    filename = fixture("article279569109.html")
 
     assert find_citations_in_file(filename) == [
       "Tex. Penal Code Section 38.02",
