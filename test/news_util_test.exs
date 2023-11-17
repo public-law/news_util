@@ -33,6 +33,7 @@ defmodule NewsUtilTest do
   end
 
 
+  @tag :focus
   test "Texas text cites" do
     filename = fixture("ar-AA1h19am")
 

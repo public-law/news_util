@@ -38,12 +38,17 @@ defmodule NewsUtil do
       |> filter(&is_binary/1)
       |> cleanup_list()
 
-    cites_from_text =
+    crs_cites_from_text =
       case Regex.scan(~r/(C.R.S. &#xa7;(&#xa7;)? \d+-\d+-\d+)/, html) do
         list -> list |> flatten() |> uniq() |> map(fn m -> String.replace(m, ~r/&#xa7; ?/, "", global: true) end) |> reject(&(String.length(&1) == 0))
       end
 
-     cites_from_hrefs  ++ cites_from_text
+    tx_cites_from_text =
+      case Regex.scan(~r/Texas Penal Code Section 38.02/, html) do
+        list -> list |> IO.inspect() |> flatten() |> uniq() |> map(fn m -> String.replace(m, ~r/&#xa7; ?/, "", global: true) end) |> reject(&(String.length(&1) == 0))
+      end
+
+     cites_from_hrefs ++ crs_cites_from_text ++ tx_cites_from_text
   end
 
 
