@@ -42,7 +42,6 @@ defmodule NewsUtil do
         list ->
           list
           |> flatten()
-          |> uniq()
           |> map(fn m -> String.replace(m, ~r/&#xa7; ?/, "", global: true) end)
           |> reject(&(String.length(&1) == 0))
       end
