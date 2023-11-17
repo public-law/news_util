@@ -34,7 +34,7 @@ defmodule NewsUtil do
     cites_from_hrefs =
       html
       |> hrefs()
-      |> map(&transform/1)
+      |> map(&href_to_cite/1)
 
     crs_cites_from_text =
       Regex.scan(~r/(C.R.S. &#xa7;(&#xa7;)? \d+-\d+-\d+)/, html)
@@ -66,8 +66,8 @@ defmodule NewsUtil do
   end
 
 
-  @spec transform(URI.t) :: nil | binary
-  defp transform(%URI{} = url) do
+  @spec href_to_cite(URI.t) :: nil | binary
+  defp href_to_cite(%URI{} = url) do
     case url do
       %{host: "leginfo.legislature.ca.gov"} -> leginfo_url_to_cite(url)
       %{host: "newyork.public.law"}         -> public_law_url_to_cite(url)
