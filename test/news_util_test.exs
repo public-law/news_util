@@ -33,6 +33,17 @@ defmodule NewsUtilTest do
   end
 
 
+  @tag :focus
+  test "Texas text cites" do
+    filename = fixture("article279569109.html")
+
+    assert find_citations_in_file(filename) == [
+      "Tex. Penal Code Section 38.02",
+      "Tex. Transp. Code Section 521.025",
+    ]
+  end
+
+
   test "Colorado plain-text CRS citations in a PDF" do
     filename = fixture("JDF432.pdf")
 

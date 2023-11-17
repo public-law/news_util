@@ -34,16 +34,23 @@ defmodule NewsUtil do
     cites_from_hrefs =
       html
       |> hrefs()
-      |> map(&transform/1)
-      |> filter(&is_binary/1)
-      |> cleanup_list()
+      |> map(&href_to_cite/1)
 
-    cites_from_text =
-      case Regex.scan(~r/(C.R.S. &#xa7;(&#xa7;)? \d+-\d+-\d+)/, html) do
-        list -> list |> flatten() |> uniq() |> map(fn m -> String.replace(m, ~r/&#xa7; ?/, "", global: true) end) |> reject(&(String.length(&1) == 0))
-      end
+    crs_cites_from_text =
+      Regex.scan(~r/(C.R.S. &#xa7;(?:&#xa7;)? \d+-\d+-\d+)/, html)
+      |> flatten()
+      |> map(fn m -> String.replace(m, ~r/&#xa7; ?/, "", global: true) end)
 
-     cites_from_hrefs  ++ cites_from_text
+    tx_cites_from_text =
+      Regex.scan(~r/(Texas \w+ Code Section [\d\w.]+)/, html)
+      |> flatten()
+      |> map(fn m -> String.replace(m, "Texas ",          "Tex. ")    end)
+      |> map(fn m -> String.replace(m, "Family ",         "Fam. ")    end)
+      |> map(fn m -> String.replace(m, "Transportation ", "Transp. ") end)
+
+     (cites_from_hrefs ++ crs_cites_from_text ++ tx_cites_from_text)
+     |> filter(&is_binary/1)
+     |> cleanup_list()
   end
 
 
@@ -58,8 +65,8 @@ defmodule NewsUtil do
   end
 
 
-  @spec transform(URI.t) :: nil | binary
-  defp transform(%URI{} = url) do
+  @spec href_to_cite(URI.t) :: nil | binary
+  defp href_to_cite(%URI{} = url) do
     case url do
       %{host: "leginfo.legislature.ca.gov"} -> leginfo_url_to_cite(url)
       %{host: "newyork.public.law"}         -> public_law_url_to_cite(url)
