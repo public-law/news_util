@@ -44,8 +44,8 @@ defmodule NewsUtil do
     tx_cites_from_text =
       Regex.scan(~r/(Texas \w+ Code Section [\d\w.]+)/, html)
       |> flatten()
-      |> map(fn m -> String.replace(m, "Texas ", "Tex. ") end)
-      |> map(fn m -> String.replace(m, "Family ", "Fam. ") end)
+      |> map(fn m -> String.replace(m, "Texas ",          "Tex. ")    end)
+      |> map(fn m -> String.replace(m, "Family ",         "Fam. ")    end)
       |> map(fn m -> String.replace(m, "Transportation ", "Transp. ") end)
 
      (cites_from_hrefs ++ crs_cites_from_text ++ tx_cites_from_text)
