@@ -36,7 +36,6 @@ defmodule NewsUtil do
       |> hrefs()
       |> map(&transform/1)
       |> filter(&is_binary/1)
-      |> cleanup_list()
 
     crs_cites_from_text =
       case Regex.scan(~r/(C.R.S. &#xa7;(&#xa7;)? \d+-\d+-\d+)/, html) do
@@ -53,7 +52,7 @@ defmodule NewsUtil do
           |> map(fn m -> String.replace(m, "Transportation ", "Transp. ", global: true) end)
       end
 
-     uniq(cites_from_hrefs ++ crs_cites_from_text ++ tx_cites_from_text)
+     cleanup_list(cites_from_hrefs ++ crs_cites_from_text ++ tx_cites_from_text)
   end
 
 
