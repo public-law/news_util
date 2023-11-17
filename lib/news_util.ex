@@ -44,14 +44,13 @@ defmodule NewsUtil do
       end
 
     tx_cites_from_text =
-      case Regex.scan(~r/(Texas)/, html) do
+      case Regex.scan(~r/(Texas \w+ Code Section [\d\w.]+)/, html) do
         list ->
           list
           |> flatten()
           |> uniq()
           |> map(fn m -> String.replace(m, ~r/&#xa7; ?/, "", global: true) end)
           |> reject(&(String.length(&1) == 0))
-          |> dbg()
       end
 
      cites_from_hrefs ++ crs_cites_from_text ++ tx_cites_from_text
