@@ -49,8 +49,6 @@ defmodule NewsUtil do
           list
           |> flatten()
           |> uniq()
-          |> map(fn m -> String.replace(m, ~r/&#xa7; ?/, "", global: true) end)
-          |> reject(&(String.length(&1) == 0))
           |> map(fn m -> String.replace(m, "Texas ", "Tex. ", global: true) end)
           |> map(fn m -> String.replace(m, "Family ", "Fam. ", global: true) end)
           |> map(fn m -> String.replace(m, "Transportation ", "Transp. ", global: true) end)
