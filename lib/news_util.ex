@@ -37,7 +37,7 @@ defmodule NewsUtil do
       |> map(&href_to_cite/1)
 
     crs_cites_from_text =
-      Regex.scan(~r/(C.R.S. &#xa7;(&#xa7;)? \d+-\d+-\d+)/, html)
+      Regex.scan(~r/(C.R.S. &#xa7;(?:&#xa7;)? \d+-\d+-\d+)/, html)
       |> flatten()
       |> map(fn m -> String.replace(m, ~r/&#xa7; ?/, "", global: true) end)
 
@@ -50,7 +50,6 @@ defmodule NewsUtil do
 
      (cites_from_hrefs ++ crs_cites_from_text ++ tx_cites_from_text)
      |> filter(&is_binary/1)
-     |> reject(&(String.length(&1) == 0))
      |> cleanup_list()
   end
 
