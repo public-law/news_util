@@ -61,4 +61,12 @@ defmodule NewsUtilTest do
       "N.Y. Penal Law Section 485.05"
     ]
   end
+
+
+  test "ORS links to public.law" do
+    assert(
+      find_citations_in_file(fixture("autopsy-laws-by-state")) ==
+      ["ORS 146.117"]
+    )
+  end
 end
