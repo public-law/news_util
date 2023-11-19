@@ -71,6 +71,7 @@ defmodule NewsUtil do
       %{host: "leginfo.legislature.ca.gov"} -> leginfo_url_to_cite(url)
       %{host: "newyork.public.law"}         -> public_law_url_to_cite(url)
       %{host: "texas.public.law"}           -> public_law_url_to_cite(url)
+      %{host: "oregon.public.law"}          -> public_law_url_to_cite(url)
       _ -> nil
     end
   end
@@ -94,6 +95,7 @@ defmodule NewsUtil do
     |> map(&String.capitalize/1)
     |> join(" ")
     |> String.replace("N.y.", "N.Y.")
+    |> String.replace("Ors",  "ORS")
   end
 
 
