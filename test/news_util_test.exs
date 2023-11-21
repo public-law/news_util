@@ -63,10 +63,18 @@ defmodule NewsUtilTest do
   end
 
 
-  test "ORS links to public.law" do
+  test "ORS links to public.law - 1" do
     assert(
       find_citations_in_file(fixture("autopsy-laws-by-state")) ==
       ["ORS 146.117"]
+    )
+  end
+
+
+  test "ORS links to public.law - 2" do
+    assert(
+      find_citations_in_file(fixture("ppb-police-body-came-explained-how-it-works")) ==
+      ["ORS 133.741"]
     )
   end
 end
