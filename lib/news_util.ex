@@ -14,7 +14,7 @@ defmodule NewsUtil do
   def find_citations(%URI{} = uri) do
     url       = URI.to_string(uri)
     temp_file = FileUtil.tmp_file!(url)
-    File.write!(temp_file, CurlEx.get!(url))
+    File.write!(temp_file, CurlEx.get_with_user_agent!(url, :microsoft_edge_windows))
 
     find_citations_in_file(temp_file)
   end
