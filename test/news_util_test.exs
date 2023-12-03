@@ -56,12 +56,10 @@ defmodule NewsUtilTest do
 
   test "NY links to public.law" do
     filename = fixture("Potential expulsions for SUNY and CUNY students convicted of hate crimes, amidst surge in antisemitic incidents _ WRGB.html")
-
     assert find_citations_in_file(filename) == [
       "N.Y. Penal Law Section 485.05"
     ]
   end
-
 
   test "ORS links to public.law - 1" do
     assert(
@@ -70,11 +68,17 @@ defmodule NewsUtilTest do
     )
   end
 
-
   test "ORS links to public.law - 2" do
     assert(
       find_citations_in_file(fixture("ppb-police-body-came-explained-how-it-works")) ==
       ["ORS 133.741"]
+    )
+  end
+
+  test "Crashing Cal page" do
+    assert(
+      find_citations_in_file(fixture("medical-leave.html")) ==
+      ["CA Lab Code Section 233"]
     )
   end
 end
