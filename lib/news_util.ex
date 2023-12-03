@@ -2,6 +2,7 @@ import Enum
 import List
 
 import CalCodes
+import HttpUtil
 
 
 defmodule NewsUtil do
@@ -61,19 +62,20 @@ defmodule NewsUtil do
   end
 
 
-  @spec hrefs(binary) :: [URI.t]
-  defp hrefs(html) do
+  @spec hrefs(binary()) :: list()
+  def hrefs(html) do
     {:ok, document} = Floki.parse_document(html)
 
     document
     |> Floki.attribute("a", "href")
     |> flatten()
     |> map(&URI.parse/1)
+    |> reject(&is_nil/1)
+    |> map(fn uri -> {uri, tld(uri)} end)
   end
 
 
-  @spec href_to_cite(URI.t) :: nil | binary
-  defp href_to_cite(%URI{} = url) do
+  defp href_to_cite({url, _tld}) do
     case url do
       %{host: "leginfo.legislature.ca.gov"} -> leginfo_url_to_cite(url)
       %{host: "california.public.law"}      -> public_law_url_to_cite(url)

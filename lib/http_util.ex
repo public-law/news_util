@@ -3,6 +3,8 @@ defmodule HttpUtil do
   A module for HTTP functions.
   """
 
+  @spec tld(URI.t()) :: binary() | nil
+
   @doc """
   Get the top-level domain from a URI.
 
@@ -14,7 +16,8 @@ defmodule HttpUtil do
       iex> HttpUtil.tld(%URI{host: "www.example.co.uk"})
       "co.uk"
   """
-  @spec tld(URI.t()) :: binary()
+  def tld(%URI{host: nil}), do: nil
+
   def tld(%URI{host: host}) do
     host
     |> String.split(".")
