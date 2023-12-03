@@ -5,7 +5,7 @@ defmodule News.Text do
   A module for text functions.
   """
 
-  @spec titleize(binary()) :: binary()
+  @spec titleize(binary) :: binary
   def titleize(string) when is_binary(string) do
     string
     |> String.split(" ")

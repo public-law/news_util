@@ -3,7 +3,7 @@ defmodule News.Http do
   A module for HTTP functions.
   """
 
-  @spec tld(URI.t()) :: binary() | nil
+  @spec tld(URI.t) :: binary | nil
 
   @doc """
   Get the top-level domain from a URI.
