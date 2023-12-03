@@ -33,7 +33,6 @@ defmodule NewsUtilTest do
   end
 
 
-  @tag :focus
   test "Texas text cites" do
     filename = fixture("article279569109.html")
 
@@ -56,12 +55,10 @@ defmodule NewsUtilTest do
 
   test "NY links to public.law" do
     filename = fixture("Potential expulsions for SUNY and CUNY students convicted of hate crimes, amidst surge in antisemitic incidents _ WRGB.html")
-
     assert find_citations_in_file(filename) == [
       "N.Y. Penal Law Section 485.05"
     ]
   end
-
 
   test "ORS links to public.law - 1" do
     assert(
@@ -70,11 +67,29 @@ defmodule NewsUtilTest do
     )
   end
 
-
   test "ORS links to public.law - 2" do
     assert(
       find_citations_in_file(fixture("ppb-police-body-came-explained-how-it-works")) ==
       ["ORS 133.741"]
+    )
+  end
+
+  test "Crashing Cal page" do
+    assert(
+      find_citations_in_file(fixture("medical-leave.html")) ==
+      ["CA Lab Code Section 233"]
+    )
+  end
+
+  test "Colorado text cites" do
+    assert(
+      find_citations_in_file(fixture("colorado-knife-laws.html")) ==
+        [
+          "C.R.S. 18-12-101",
+          "C.R.S. 18-12-102",
+          "C.R.S. 18-12-105",
+          "C.R.S. 18-12-105.5",
+        ]
     )
   end
 end

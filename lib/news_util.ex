@@ -36,10 +36,16 @@ defmodule NewsUtil do
       |> hrefs()
       |> map(&href_to_cite/1)
 
-    crs_cites_from_text =
+    crs_cites_from_text_1 =
       Regex.scan(~r/(C.R.S. &#xa7;(?:&#xa7;)? \d+-\d+-\d+)/, html)
       |> flatten()
       |> map(fn m -> String.replace(m, ~r/&#xa7; ?/, "", global: true) end)
+
+    crs_cites_from_text_2 =
+      Regex.scan(~r/(\d+-\d+-\d+(?:\.\d+)?) C.R.S./, html)
+      |> map(&last/1)
+      |> map(fn m -> "C.R.S. #{m}" end)
+      |> flatten()
 
     tx_cites_from_text =
       Regex.scan(~r/(Texas \w+ Code Section [\d\w.]+)/, html)
@@ -48,7 +54,8 @@ defmodule NewsUtil do
       |> map(fn m -> String.replace(m, "Family ",         "Fam. ")    end)
       |> map(fn m -> String.replace(m, "Transportation ", "Transp. ") end)
 
-     (cites_from_hrefs ++ crs_cites_from_text ++ tx_cites_from_text)
+
+     (cites_from_hrefs ++ crs_cites_from_text_1 ++ crs_cites_from_text_2 ++ tx_cites_from_text)
      |> filter(&is_binary/1)
      |> cleanup_list()
   end
@@ -69,9 +76,10 @@ defmodule NewsUtil do
   defp href_to_cite(%URI{} = url) do
     case url do
       %{host: "leginfo.legislature.ca.gov"} -> leginfo_url_to_cite(url)
+      %{host: "california.public.law"}      -> public_law_url_to_cite(url)
       %{host: "newyork.public.law"}         -> public_law_url_to_cite(url)
-      %{host: "texas.public.law"}           -> public_law_url_to_cite(url)
       %{host: "oregon.public.law"}          -> public_law_url_to_cite(url)
+      %{host: "texas.public.law"}           -> public_law_url_to_cite(url)
       _ -> nil
     end
   end
@@ -85,7 +93,6 @@ defmodule NewsUtil do
   end
 
 
-  @spec public_law_url_to_cite(URI.t) :: binary
   defp public_law_url_to_cite(%URI{path: path}) do
     path
     |> String.split("/")
@@ -96,10 +103,10 @@ defmodule NewsUtil do
     |> join(" ")
     |> String.replace("N.y.", "N.Y.")
     |> String.replace("Ors",  "ORS")
+    |> String.replace(~r/^Ca /,  "CA ")
   end
 
 
-  @spec leginfo_url_to_cite(URI.t) :: binary
   defp leginfo_url_to_cite(%URI{query: query}) do
     query
     |> URI.decode_query()
@@ -107,9 +114,11 @@ defmodule NewsUtil do
   end
 
 
-  @spec make_cite_to_cal_codes(map) :: binary
   defp make_cite_to_cal_codes(%{"lawCode" => code, "sectionNum" => section}) do
     "CA #{code_to_abbrev(code)} Section #{section}"
     |> String.replace_suffix(".", "")
   end
+
+
+  defp make_cite_to_cal_codes(_), do: nil
 end
