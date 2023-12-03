@@ -14,8 +14,21 @@ defmodule NewsUtilTest do
   end
 
 
-  test "California citations when the leginfo links are standard" do
-    assert find_citations_in_fixture("qandasec5.asp") == ["CA Educ Code Section 47605", "CA Educ Code Section 47605.6"]
+  @test_cases [
+    %{
+      file: "qandasec5.asp",
+      cites: ["CA Educ Code Section 47605", "CA Educ Code Section 47605.6"]
+    }
+  ]
+
+  def run_test_cases(test_cases) do
+    Enum.each(test_cases, fn %{file: file, cites: cites} ->
+      assert find_citations_in_fixture(file) == cites
+    end)
+  end
+
+  test "test cases" do
+    run_test_cases(@test_cases)
   end
 
 
