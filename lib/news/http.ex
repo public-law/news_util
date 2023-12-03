@@ -1,4 +1,4 @@
-defmodule HttpUtil do
+defmodule News.Http do
   @moduledoc """
   A module for HTTP functions.
   """
@@ -10,13 +10,13 @@ defmodule HttpUtil do
 
   ## Examples
 
-      iex> HttpUtil.tld(%URI{host: "www.example.com"})
+      iex> News.Http.tld(%URI{host: "www.example.com"})
       "example.com"
 
-      iex> HttpUtil.tld(%URI{host: "www.example.co.uk"})
+      iex> News.Http.tld(%URI{host: "www.example.co.uk"})
       "co.uk"
 
-      iex> HttpUtil.tld(%URI{host: "oregon.public.law"})
+      iex> News.Http.tld(%URI{host: "oregon.public.law"})
       "public.law"
 
   """

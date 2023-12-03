@@ -2,7 +2,7 @@ import Enum
 import List
 
 import CalCodes
-import HttpUtil
+import News.Http
 
 
 defmodule NewsUtil do
