@@ -1,4 +1,4 @@
-defmodule FileUtil do
+defmodule News.File do
   @moduledoc """
   A module for file functions.
   """

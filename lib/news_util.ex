@@ -14,7 +14,7 @@ defmodule NewsUtil do
   @spec find_citations(URI.t) :: [binary]
   def find_citations(%URI{} = uri) do
     url       = URI.to_string(uri)
-    temp_file = FileUtil.tmp_file!(url)
+    temp_file = News.File.tmp_file!(url)
     File.write!(temp_file, CurlEx.get_with_user_agent!(url, :microsoft_edge_windows))
 
     find_citations_in_file(temp_file)
@@ -24,7 +24,7 @@ defmodule NewsUtil do
   @spec find_citations_in_file(binary) :: [binary]
   def find_citations_in_file(path) do
     case Path.extname(path) do
-      ".pdf" -> find_citations_in_html(FileUtil.read_pdf_as_html!(path))
+      ".pdf" -> find_citations_in_html(News.File.read_pdf_as_html!(path))
       _      -> find_citations_in_html(File.read!(path))
     end
   end
@@ -62,7 +62,7 @@ defmodule NewsUtil do
   end
 
 
-  @spec hrefs(binary()) :: list()
+  @spec hrefs(binary()) :: list(tuple)
   def hrefs(html) do
     {:ok, document} = Floki.parse_document(html)
 
