@@ -99,9 +99,9 @@ defmodule NewsUtil do
   defp public_law_url_to_cite(%URI{path: path}) do
     path
     |> String.split("/")
-    |> last()
+    |> last
     |> String.replace("_", " ")
-    |> News.Text.titleize()
+    |> News.Text.titleize
   end
 
 
