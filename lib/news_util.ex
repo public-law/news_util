@@ -101,12 +101,7 @@ defmodule NewsUtil do
     |> String.split("/")
     |> last()
     |> String.replace("_", " ")
-    |> String.split(" ")
-    |> map(&String.capitalize/1)
-    |> join(" ")
-    |> String.replace("N.y.", "N.Y.")
-    |> String.replace("Ors",  "ORS")
-    |> String.replace(~r/^Ca /,  "CA ")
+    |> News.Text.titleize()
   end
 
 
