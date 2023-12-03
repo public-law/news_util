@@ -69,9 +69,10 @@ defmodule NewsUtil do
   defp href_to_cite(%URI{} = url) do
     case url do
       %{host: "leginfo.legislature.ca.gov"} -> leginfo_url_to_cite(url)
+      %{host: "california.public.law"}      -> public_law_url_to_cite(url)
       %{host: "newyork.public.law"}         -> public_law_url_to_cite(url)
-      %{host: "texas.public.law"}           -> public_law_url_to_cite(url)
       %{host: "oregon.public.law"}          -> public_law_url_to_cite(url)
+      %{host: "texas.public.law"}           -> public_law_url_to_cite(url)
       _ -> nil
     end
   end
@@ -85,7 +86,6 @@ defmodule NewsUtil do
   end
 
 
-  @spec public_law_url_to_cite(URI.t) :: binary
   defp public_law_url_to_cite(%URI{path: path}) do
     path
     |> String.split("/")
@@ -96,6 +96,7 @@ defmodule NewsUtil do
     |> join(" ")
     |> String.replace("N.y.", "N.Y.")
     |> String.replace("Ors",  "ORS")
+    |> String.replace(~r/^Ca /,  "CA ")
   end
 
 
