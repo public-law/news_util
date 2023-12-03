@@ -33,7 +33,6 @@ defmodule NewsUtilTest do
   end
 
 
-  @tag :focus
   test "Texas text cites" do
     filename = fixture("article279569109.html")
 
@@ -79,6 +78,18 @@ defmodule NewsUtilTest do
     assert(
       find_citations_in_file(fixture("medical-leave.html")) ==
       ["CA Lab Code Section 233"]
+    )
+  end
+
+  test "Colorado text cites" do
+    assert(
+      find_citations_in_file(fixture("colorado-knife-laws.html")) ==
+        [
+          "C.R.S. 18-12-101",
+          "C.R.S. 18-12-102",
+          "C.R.S. 18-12-105",
+          "C.R.S. 18-12-105.5",
+        ]
     )
   end
 end
