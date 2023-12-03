@@ -1,9 +1,9 @@
-defmodule FileUtil do
+defmodule News.File do
   @moduledoc """
   A module for file functions.
   """
 
-  @spec read_pdf_as_html!(binary()) :: binary()
+  @spec read_pdf_as_html!(binary) :: binary
   def read_pdf_as_html!(input_path) do
     html_temp_file = tmp_file!("tempfile.html")
     System.cmd("mutool", ["convert", "-o", html_temp_file, input_path])
@@ -11,7 +11,7 @@ defmodule FileUtil do
   end
 
 
-  @spec tmp_file!(binary()) :: binary()
+  @spec tmp_file!(binary) :: binary
   def tmp_file!(ext_to_match \\ "tempfile.tmp") do
     ext  = Path.extname(ext_to_match)
     dir  = System.tmp_dir!()
@@ -21,7 +21,7 @@ defmodule FileUtil do
   end
 
 
-  @spec rand() :: pos_integer()
+  @spec rand() :: pos_integer
   def rand() do
     :rand.uniform(10_000_000_000_000)
   end
