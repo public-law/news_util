@@ -75,14 +75,12 @@ defmodule NewsUtil do
   end
 
 
-  defp href_to_cite({url, _tld}) do
-    case url do
-      %{host: "leginfo.legislature.ca.gov"} -> leginfo_url_to_cite(url)
-      %{host: "california.public.law"}      -> public_law_url_to_cite(url)
-      %{host: "newyork.public.law"}         -> public_law_url_to_cite(url)
-      %{host: "oregon.public.law"}          -> public_law_url_to_cite(url)
-      %{host: "texas.public.law"}           -> public_law_url_to_cite(url)
-      _ -> nil
+  defp href_to_cite({%URI{host: host} = url, top_level_domain}) do
+    cond do
+      top_level_domain == "public.law" -> public_law_url_to_cite(url)
+      host == "leginfo.legislature.ca.gov" -> leginfo_url_to_cite(url)
+
+      true -> nil
     end
   end
 
