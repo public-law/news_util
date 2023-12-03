@@ -36,10 +36,16 @@ defmodule NewsUtil do
       |> hrefs()
       |> map(&href_to_cite/1)
 
-    crs_cites_from_text =
+    crs_cites_from_text_1 =
       Regex.scan(~r/(C.R.S. &#xa7;(?:&#xa7;)? \d+-\d+-\d+)/, html)
       |> flatten()
       |> map(fn m -> String.replace(m, ~r/&#xa7; ?/, "", global: true) end)
+
+    crs_cites_from_text_2 =
+      Regex.scan(~r/(\d+-\d+-\d+(?:\.\d+)?) C.R.S./, html)
+      |> map(&last/1)
+      |> map(fn m -> "C.R.S. #{m}" end)
+      |> flatten()
 
     tx_cites_from_text =
       Regex.scan(~r/(Texas \w+ Code Section [\d\w.]+)/, html)
@@ -48,7 +54,8 @@ defmodule NewsUtil do
       |> map(fn m -> String.replace(m, "Family ",         "Fam. ")    end)
       |> map(fn m -> String.replace(m, "Transportation ", "Transp. ") end)
 
-     (cites_from_hrefs ++ crs_cites_from_text ++ tx_cites_from_text)
+
+     (cites_from_hrefs ++ crs_cites_from_text_1 ++ crs_cites_from_text_2 ++ tx_cites_from_text)
      |> filter(&is_binary/1)
      |> cleanup_list()
   end
