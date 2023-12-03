@@ -68,7 +68,7 @@ defmodule CalCodes do
   Given a California leginfo code,
   return its Public.Law abbreviation.
   """
-  @spec code_to_abbrev(binary()) :: binary()
+  @spec code_to_abbrev(binary) :: binary
   def code_to_abbrev(code) do
     @code_abbrevs[@cal_codes[code]]
   end
