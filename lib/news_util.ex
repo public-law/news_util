@@ -99,7 +99,6 @@ defmodule NewsUtil do
   end
 
 
-  @spec leginfo_url_to_cite(URI.t) :: binary
   defp leginfo_url_to_cite(%URI{query: query}) do
     query
     |> URI.decode_query()
@@ -107,9 +106,11 @@ defmodule NewsUtil do
   end
 
 
-  @spec make_cite_to_cal_codes(map) :: binary
   defp make_cite_to_cal_codes(%{"lawCode" => code, "sectionNum" => section}) do
     "CA #{code_to_abbrev(code)} Section #{section}"
     |> String.replace_suffix(".", "")
   end
+
+
+  defp make_cite_to_cal_codes(_), do: nil
 end
