@@ -77,8 +77,11 @@ defmodule NewsUtil do
 
   defp href_to_cite({%URI{host: host} = url, top_level_domain}) do
     cond do
-      top_level_domain == "public.law" -> public_law_url_to_cite(url)
-      host == "leginfo.legislature.ca.gov" -> leginfo_url_to_cite(url)
+      top_level_domain == "public.law" ->
+        public_law_url_to_cite(url)
+
+      host == "leginfo.legislature.ca.gov" ->
+        leginfo_url_to_cite(url)
 
       true -> nil
     end
