@@ -72,11 +72,9 @@ defmodule NewsUtilTest do
   ]
 
 
-  describe "cases" do
-    Enum.each(@test_cases, fn %{file: f, cites: c} ->
-      test "Check #{f}" do
-        assert find_citations_in_fixture(unquote f) == unquote(c)
-      end
-    end)
-  end
+  Enum.each(@test_cases, fn %{file: f, cites: c} ->
+    test "finds the cites in #{f}" do
+      assert find_citations_in_fixture(unquote f) == unquote(c)
+    end
+  end)
 end
