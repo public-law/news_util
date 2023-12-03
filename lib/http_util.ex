@@ -15,6 +15,10 @@ defmodule HttpUtil do
 
       iex> HttpUtil.tld(%URI{host: "www.example.co.uk"})
       "co.uk"
+
+      iex> HttpUtil.tld(%URI{host: "oregon.public.law"})
+      "public.law"
+
   """
   def tld(%URI{host: nil}), do: nil
 
