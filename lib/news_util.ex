@@ -75,12 +75,12 @@ defmodule NewsUtil do
 
 
   @spec href_to_cite(URI.t) :: nil | binary
-  def href_to_cite(%URI{host: host} = url) do
+  def href_to_cite(%URI{} = url) do
     cond do
       tld(url) == "public.law" ->
         public_law_url_to_cite(url)
 
-      host == "leginfo.legislature.ca.gov" ->
+      url.host == "leginfo.legislature.ca.gov" ->
         leginfo_url_to_cite(url)
 
       true -> nil
