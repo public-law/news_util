@@ -9,7 +9,7 @@ defmodule CodeGen do
       url
       |> URI.parse()
       |> NewsUtil.find_citations()
-      |> Enum.map_join(",\n    ", fn cite -> "\"#{cite}\"" end)
+      |> Enum.map_join(",\n    ", fn cite -> "'#{cite}'" end)
 
     """
     NewsImport.add(
