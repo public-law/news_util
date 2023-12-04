@@ -5,7 +5,11 @@ defmodule CodeGen do
 
 
   def ruby_code(url) do
-    cites = "[" <> Enum.join(Enum.map(NewsUtil.find_citations(URI.parse(url)), fn cite -> "\n    \"#{cite}\"" end), ",") <> "\n  ]"
+    citations =
+      url
+      |> URI.parse()
+      |> NewsUtil.find_citations()
+      |> Enum.map_join(",\n    ", fn cite -> "'#{cite}'" end)
 
     """
     NewsImport.add(
@@ -16,7 +20,9 @@ defmodule CodeGen do
         published_on:     Date.parse(''),
         summary:          "",
       ),
-      #{cites}
+      [
+        #{citations}
+      ]
     )
     """
   end
