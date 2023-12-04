@@ -5,7 +5,10 @@ defmodule CodeGen do
 
 
   def ruby_code(url) do
-    cites = "[" <> Enum.map_join(NewsUtil.find_citations(URI.parse(url)), ",", fn cite -> "\n    \"#{cite}\"" end) <> "\n  ]"
+    lines = Enum.map_join(NewsUtil.find_citations(URI.parse(url)), ",", fn cite -> "\n    \"#{cite}\"" end)
+
+    cites = "[" <> lines <> "\n  ]"
+
 
     """
     NewsImport.add(
