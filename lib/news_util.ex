@@ -62,7 +62,7 @@ defmodule NewsUtil do
   end
 
 
-  @spec hrefs(binary()) :: list(tuple)
+  @spec hrefs(binary) :: list[URI.t]
   def hrefs(html) do
     {:ok, document} = Floki.parse_document(html)
 
@@ -71,13 +71,12 @@ defmodule NewsUtil do
     |> flatten()
     |> map(&URI.parse/1)
     |> reject(&is_nil/1)
-    |> map(fn uri -> {uri, tld(uri)} end)
   end
 
 
-  defp href_to_cite({%URI{host: host} = url, top_level_domain}) do
+  defp href_to_cite(%URI{host: host} = url) do
     cond do
-      top_level_domain == "public.law" ->
+      tld(url) == "public.law" ->
         public_law_url_to_cite(url)
 
       host == "leginfo.legislature.ca.gov" ->
