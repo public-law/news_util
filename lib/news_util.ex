@@ -74,7 +74,8 @@ defmodule NewsUtil do
   end
 
 
-  defp href_to_cite(%URI{host: host} = url) do
+  @spec href_to_cite(URI.t) :: nil | binary
+  def href_to_cite(%URI{host: host} = url) do
     cond do
       tld(url) == "public.law" ->
         public_law_url_to_cite(url)
