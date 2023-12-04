@@ -117,6 +117,5 @@ defmodule NewsUtil do
     |> String.replace_suffix(".", "")
   end
 
-
   defp make_cite_to_cal_codes(_), do: nil
 end
