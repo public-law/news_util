@@ -3,14 +3,22 @@ defmodule CodeGen do
   A module for generating code.
   """
 
-  @ruby_code """
-  def hello_world
-    puts 'Hello, world!'
-  end
-  """
 
-  @spec ruby_code() :: <<_::344>>
-  def ruby_code do
-    @ruby_code
+  def ruby_code(url) do
+    cites = "[" <> Enum.join(Enum.map(NewsUtil.find_citations(URI.parse(url)), fn cite -> "\"#{cite}\"" end), ", ") <> "]"
+
+
+    """
+    NewsImport.add(
+      Item.find_or_create_by(
+        url:              URI('#{url}').to_s,
+        secondary_source: Source.find_by!(name: ''),
+        title:            "",
+        published_on:     Date.parse(''),
+        summary:          "",
+      ),
+      #{cites}
+    )
+    """
   end
 end
