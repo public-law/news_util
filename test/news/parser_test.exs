@@ -1,4 +1,5 @@
 alias News.Parser
+alias News.Test
 
 defmodule News.ParserTest do
   @moduledoc false
@@ -19,7 +20,7 @@ defmodule News.ParserTest do
 
   Enum.each(@test_cases_for_title, fn %{file: f, title: c} ->
     test "finds the title in #{f}" do
-      assert Parser.find_title(News.Test.fixture(unquote(f))) == unquote(c)
+      assert Parser.find_title(File.read! Test.fixture(unquote(f))) == unquote(c)
     end
   end)
 end

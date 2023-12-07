@@ -8,21 +8,28 @@ defmodule News.Parser do
   """
   @spec find_title(binary) :: binary
   def find_title(html) do
-    title_from_meta_tags = find_title_from_meta_tags(html)
-    title_from_html_tag  = find_title_from_html_tag(html)
+    # title_from_meta_tags = find_title_from_meta_tags(html)
+    # title_from_html_tag  = find_title_from_html_tag(html)
 
-    if String.length(title_from_meta_tags) > String.length(title_from_html_tag) do
-      title_from_meta_tags
-    else
-      title_from_html_tag
-    end
+    # if String.length(title_from_meta_tags) > String.length(title_from_html_tag) do
+    #   title_from_meta_tags
+    # else
+    #   title_from_html_tag
+    # end
+
+    find_title_from_html_tag(html)
   end
 
   # Create initial simple implementations of the missing functions.
   def find_title_from_meta_tags(_html) do
-    "Charter School FAQ Section 5"
+    "Charter School FAQ Section 99"
   end
-  def find_title_from_html_tag(_html) do
-    "Charter School FAQ Section 5"
+
+  def find_title_from_html_tag(html) do
+    {:ok, document} = Floki.parse_document(html)
+
+    document
+    |> Floki.find("title")
+    |> Floki.text()
   end
 end
