@@ -35,16 +35,15 @@ defmodule News.Parser do
     |> Floki.find("meta[property='og:site_name']")
     |> Floki.attribute("content")
     |> List.first
-    |> String.trim()
     |> case do
-        "" -> find_source_name(URI.parse(url))
-        x  -> x
+        nil -> find_source_name_by_retrieving(URI.parse(url))
+        x   -> x |> String.trim()
       end
   end
 
 
-  @spec find_source_name(URI.t) :: binary
-  def find_source_name(%URI{} = url) do
+  @spec find_source_name_by_retrieving(URI.t) :: binary
+  def find_source_name_by_retrieving(%URI{} = url) do
     {:ok, document} =
       url
       |> find_source_url()
@@ -78,7 +77,7 @@ defmodule News.Parser do
 
   defp title_without_hyphenation(title) do
     title
-      |> String.split(~r/[-–—]/)
+      |> String.split(~r/[-–—|]/)
       |> List.first
       |> String.trim
   end

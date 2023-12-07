@@ -10,7 +10,7 @@ alias News.Parser
 defmodule News.Article do
   @moduledoc "The main entity being parsed."
 
-  defstruct [
+  @enforce_keys [
     :citations,
     :title,
     :description,
@@ -18,7 +18,7 @@ defmodule News.Article do
     :source_url,
     :date_modified
   ]
-  @enforce_keys [
+  defstruct [
     :citations,
     :title,
     :description,
@@ -53,12 +53,12 @@ defmodule News.Article do
   def find_info_in_html(html, uri) do
     {:ok, document} = Floki.parse_document(html)
 
-    cites  = find_citations_in_html(html, document)
-    title  = Parser.find_title(document)
-    descr  = find_description_in_html(document)
-    source = Parser.find_source_name(uri)
+    cites      = find_citations_in_html(html, document)
+    title      = Parser.find_title(document)
+    descr      = find_description_in_html(document)
+    source     = Parser.find_source_name(document, uri)
     source_url = Parser.find_source_url(uri)
-    date   = DateModified.parse(document)
+    date       = DateModified.parse(document)
 
     %News.Article{
       citations: cites,
