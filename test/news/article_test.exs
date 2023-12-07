@@ -1,11 +1,11 @@
 alias News.Test
 
-import NewsUtil
+import News.Article
 
-defmodule NewsUtilTest do
+defmodule News.ArticleTest do
   @moduledoc false
   use ExUnit.Case
-  doctest NewsUtil
+  doctest News.Article
 
   @test_cases [
     %{

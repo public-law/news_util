@@ -7,7 +7,7 @@ alias News.Parser
 alias News.DateModified
 
 
-defmodule NewsUtil do
+defmodule News.Article do
   @moduledoc false
 
   @doc """
