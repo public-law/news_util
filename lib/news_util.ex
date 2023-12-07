@@ -11,7 +11,6 @@ defmodule NewsUtil do
   @doc """
   Find citations in a string of HTML or from a URL.
   """
-  @spec find_citations(URI.t) :: [binary]
   def find_citations(%URI{} = uri) do
     url       = URI.to_string(uri)
     temp_file = News.File.tmp_file!(url)
@@ -21,7 +20,6 @@ defmodule NewsUtil do
   end
 
 
-  @spec find_citations_in_file(binary) :: [binary]
   def find_citations_in_file(path) do
     html = case Path.extname(path) do
       ".pdf" -> News.File.read_pdf_as_html!(path)
