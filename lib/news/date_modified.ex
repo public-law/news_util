@@ -3,7 +3,7 @@ defmodule News.DateModified do
   Parses the most recent Published Date from a news article.
   """
 
-
+  @spec parse(Floki.html_tree) :: Date.t | nil
   def parse(document) do
     {:ok, struct} =
       case Floki.find(document, "script[type='application/ld+json']") do
@@ -17,7 +17,8 @@ defmodule News.DateModified do
         case Map.get(struct, "dateModified") do
           nil -> nil
           date_modified ->
-            case Date.from_iso8601(date_modified) do
+            iso_date = Regex.run(~r/(\d{4}-\d{2}-\d{2})/, date_modified) |> List.first
+            case Date.from_iso8601(iso_date) do
               {:ok, date} -> date
               _ -> nil
             end
