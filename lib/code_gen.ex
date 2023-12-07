@@ -10,24 +10,22 @@ defmodule CodeGen do
       |> URI.parse()
       |> NewsUtil.find_citations()
 
-    citations =
+    citation_list =
       info.citations
       |> Enum.map_join(",\n    ", fn cite -> "'#{cite}'" end)
 
-    title = info.title
-    descr = info.description
 
     """
     NewsImport.add(
       Item.find_or_create_by(
         url:              URI('#{url}').to_s,
-        title:            "#{title}",
-        summary:          "#{descr}",
+        title:            "#{info.title}",
+        summary:          "#{info.description}",
         secondary_source: Source.find_by!(name: ''),
         published_on:     Date.parse(''),
       ),
       [
-        #{citations}
+        #{citation_list}
       ]
     )
     """
