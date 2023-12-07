@@ -33,7 +33,25 @@ defmodule News.Parser do
   end
 
 
-  # Create initial simple implementations of the missing functions.
+  def find_source_name(%URI{} = url) do
+    {:ok, document} =
+      url
+      |> find_source_url()
+      |> CurlEx.get_with_user_agent!(:microsoft_edge_windows)
+      |> Floki.parse_document()
+
+    document
+    |> Floki.find("title")
+    |> Floki.text()
+    |> String.trim()
+  end
+
+
+  def find_source_url(%URI{} = uri) do
+    "#{uri.scheme}://#{uri.host}"
+  end
+
+
   def find_title_from_meta_tags(_html) do
     "Charter School FAQ Section 99"
   end

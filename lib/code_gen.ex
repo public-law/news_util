@@ -17,13 +17,15 @@ defmodule CodeGen do
 
 
     """
+    Source.find_or_create_by!(name: "#{info.source_name}", url: "#{info.source_url}")
+
     NewsImport.add(
       Item.find_or_create_by(
         url:              URI('#{url}').to_s,
         title:            "#{info.title}",
         summary:          "#{info.description}",
-        secondary_source: Source.find_by!(name: ''),
-        published_on:     Date.parse(''),
+        secondary_source: Source.find_by!(name: '#{info.source_name}'),
+        published_on:     Date.parse('#{info.date_modified}'),
       ),
       [
         #{citation_list}
