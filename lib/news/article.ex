@@ -31,26 +31,26 @@ defmodule News.Article do
   @doc """
   Find citations in a string of HTML or from a URL.
   """
-  def find_info(%URI{} = uri) do
+  def parse(%URI{} = uri) do
     url       = URI.to_string(uri)
     temp_file = News.File.tmp_file!(url)
     File.write!(temp_file, Http.get!(url))
 
-    find_info_in_file(temp_file, uri)
+    parse_from_file(temp_file, uri)
   end
 
 
-  def find_info_in_file(path, uri) do
+  def parse_from_file(path, uri) do
     html = case Path.extname(path) do
       ".pdf" -> News.File.read_pdf_as_html!(path)
       _      -> File.read!(path)
     end
 
-    find_info_in_html(html, uri)
+    parse_from_html(html, uri)
   end
 
 
-  def find_info_in_html(html, uri) do
+  def parse_from_html(html, uri) do
     {:ok, document} = Floki.parse_document(html)
 
     cites      = find_citations_in_html(html, document)
