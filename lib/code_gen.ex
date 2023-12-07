@@ -4,6 +4,7 @@ defmodule CodeGen do
   """
 
 
+  @spec ruby_code(binary | URI.t) :: binary
   def ruby_code(url) do
     info =
       url
