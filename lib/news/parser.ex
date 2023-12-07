@@ -33,14 +33,15 @@ defmodule News.Parser do
   end
 
 
-  @spec find_source_name(any()) :: binary
-  def find_source_name(_document) do
+  @spec find_source_name(binary) :: binary
+  def find_source_name(url) do
     "TBD"
   end
 
-  @spec find_source_url(any()) :: binary
-  def find_source_url(_document) do
-    "TBD"
+  @spec find_source_url(binary) :: binary
+  def find_source_url(url) do
+    u = URI.parse(url)
+    "#{u.scheme}://#{u.host}"
   end
 
 
