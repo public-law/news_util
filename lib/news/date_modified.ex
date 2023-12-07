@@ -5,23 +5,21 @@ defmodule News.DateModified do
 
 
   def parse(document) do
-    schema =
-      document
-      |> Floki.find("script[type='application/ld+json']")
-      |> dbg
+    {:ok, struct} =
+      case Floki.find(document, "script[type='application/ld+json']") do
+        [] -> {:ok, nil}
+        [{_, _, schema_text}] -> Jason.decode(schema_text)
+      end
 
-    case schema do
-      [] -> nil
+    case struct do
+      nil -> nil
       _ ->
-        case Jason.decode(Floki.text(schema)) do
-          {:ok, json} ->
-            case Map.get(json, "dateModified") do
-              nil -> nil
-              date_modified ->
-                case Date.from_iso8601(date_modified) do
-                  {:ok, date} -> date
-                  _ -> nil
-                end
+        case Map.get(struct, "dateModified") do
+          nil -> nil
+          date_modified ->
+            case Date.from_iso8601(date_modified) do
+              {:ok, date} -> date
+              _ -> nil
             end
         end
     end
