@@ -28,6 +28,19 @@ defmodule News.Parser do
   def find_title_from_html_tag(html) do
     {:ok, document} = Floki.parse_document(html)
 
+    title = raw_title(document)
+
+    title_without_hyphenation =
+      title
+      |> String.split(~r/[-–—]/)
+      |> List.first
+      |> String.trim
+
+    title_without_hyphenation
+  end
+
+
+  defp raw_title(document) do
     document
     |> Floki.find("title")
     |> Floki.text()
