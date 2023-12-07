@@ -3,6 +3,7 @@ defmodule News.Test do
   Test helpers.
   """
 
+  @spec fixture(binary) :: binary
   def fixture(name) do
     Path.join("test/fixtures", name)
   end

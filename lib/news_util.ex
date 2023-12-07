@@ -3,15 +3,16 @@ import List
 
 import CalCodes
 import News.Http
+alias News.Parser
 
 
 defmodule NewsUtil do
   @moduledoc false
 
+  @spec find_citations(URI.t()) :: %{citations: [binary], description: binary, title: binary}
   @doc """
   Find citations in a string of HTML or from a URL.
   """
-  @spec find_citations(URI.t) :: [binary]
   def find_citations(%URI{} = uri) do
     url       = URI.to_string(uri)
     temp_file = News.File.tmp_file!(url)
@@ -21,19 +22,38 @@ defmodule NewsUtil do
   end
 
 
-  @spec find_citations_in_file(binary) :: [binary]
+  @spec find_citations_in_file(
+          binary
+        ) :: %{citations: [binary], description: binary, title: binary}
   def find_citations_in_file(path) do
-    case Path.extname(path) do
-      ".pdf" -> find_citations_in_html(News.File.read_pdf_as_html!(path))
-      _      -> find_citations_in_html(File.read!(path))
+    html = case Path.extname(path) do
+      ".pdf" -> News.File.read_pdf_as_html!(path)
+      _      -> File.read!(path)
     end
+
+    find_info_in_html(html)
   end
 
 
-  @spec find_citations_in_html(binary) :: [binary]
-  defp find_citations_in_html(html) do
+  @spec find_info_in_html(binary) :: %{
+          citations: [binary],
+          description: binary,
+          title: binary
+        }
+  def find_info_in_html(html) do
+    {:ok, document} = Floki.parse_document(html)
+
+    cites = find_citations_in_html(html, document)
+    title = Parser.find_title(document)
+    descr = find_description_in_html(document)
+
+    %{citations: cites, title: title, description: descr}
+  end
+
+
+  defp find_citations_in_html(html, document) do
     cites_from_hrefs =
-      html
+      document
       |> hrefs()
       |> map(&href_to_cite/1)
 
@@ -62,10 +82,7 @@ defmodule NewsUtil do
   end
 
 
-  @spec hrefs(binary) :: list[URI.t]
-  def hrefs(html) do
-    {:ok, document} = Floki.parse_document(html)
-
+  def hrefs(document) do
     document
     |> Floki.attribute("a", "href")
     |> flatten()
@@ -118,4 +135,15 @@ defmodule NewsUtil do
   end
 
   defp make_cite_to_cal_codes(_), do: nil
+
+
+  # Retrieve the HTML description meta tag's content.
+  # <meta name="description" content="Questions and answers regarding charter school staffing issues." />
+  defp find_description_in_html(document) do
+    document
+    |> Floki.find("meta[name=description]")
+    |> Floki.attribute("content")
+    |> Floki.text()
+    |> String.trim()
+  end
 end

@@ -1,3 +1,5 @@
+alias News.Test
+
 import NewsUtil
 
 defmodule NewsUtilTest do
@@ -66,7 +68,10 @@ defmodule NewsUtilTest do
 
   Enum.each(@test_cases, fn %{file: f, cites: c} ->
     test "finds the cites in #{f}" do
-      assert find_citations_in_file(News.Test.fixture(unquote(f))) == unquote(c)
+      file  = unquote(f)
+      cites = unquote(c)
+
+      assert %{citations: ^cites} = file |> Test.fixture |> find_citations_in_file
     end
   end)
 end
