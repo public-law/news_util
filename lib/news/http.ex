@@ -30,4 +30,7 @@ defmodule News.Http do
     |> Enum.reverse()
     |> Enum.join(".")
   end
+
+
+  def get!(url), do: CurlEx.get_with_user_agent!(url, :microsoft_edge_windows)
 end

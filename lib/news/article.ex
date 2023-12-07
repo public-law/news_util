@@ -2,13 +2,16 @@ import Enum
 import List
 
 import CalCodes
-import News.Http
-alias News.Parser
+alias News.Http
 alias News.DateModified
+alias News.Parser
 
 
 defmodule News.Article do
-  @moduledoc false
+  @moduledoc """
+  The main entity being parsed.
+  """
+
 
   @doc """
   Find citations in a string of HTML or from a URL.
@@ -16,7 +19,7 @@ defmodule News.Article do
   def find_citations(%URI{} = uri) do
     url       = URI.to_string(uri)
     temp_file = News.File.tmp_file!(url)
-    File.write!(temp_file, CurlEx.get_with_user_agent!(url, :microsoft_edge_windows))
+    File.write!(temp_file, Http.get!(url))
 
     find_citations_in_file(temp_file, uri)
   end
@@ -96,7 +99,7 @@ defmodule News.Article do
   @spec href_to_cite(URI.t) :: nil | binary
   def href_to_cite(%URI{} = url) do
     cond do
-      tld(url) == "public.law" ->
+      Http.tld(url) == "public.law" ->
         public_law_url_to_cite(url)
 
       url.host == "leginfo.legislature.ca.gov" ->
