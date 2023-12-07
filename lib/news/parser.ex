@@ -33,6 +33,15 @@ defmodule News.Parser do
   end
 
 
+  def find_source_name(_document) do
+    "California Department of Education"
+  end
+
+  def find_source_url(_document) do
+    "https://www.cde.ca.gov"
+  end
+
+
   # Create initial simple implementations of the missing functions.
   def find_title_from_meta_tags(_html) do
     "Charter School FAQ Section 99"
