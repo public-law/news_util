@@ -3,19 +3,10 @@ defmodule News.Parser do
   A module for parsing news articles.
   """
 
-  @spec find_title(
-          binary()
-          | [
-              binary()
-              | {:comment, binary()}
-              | {:pi | binary(), binary() | [{any(), any()}] | %{optional(binary()) => binary()},
-                 list() | %{optional(binary()) => binary()}}
-              | {:doctype, binary(), binary(), binary()}
-            ]
-        ) :: binary
   @doc """
   Find the best title in the HTML tags and meta-tags.
   """
+  @spec find_title(Floki.html_tree) :: binary
   def find_title(document) do
     orig_title  = title_tag(document)
     clean_title = title_without_hyphenation(orig_title)
@@ -33,6 +24,13 @@ defmodule News.Parser do
   end
 
 
+  @spec find_source_name(Floki.html_tree, binary) :: binary
+  def find_source_name(document, url) when is_binary(url) do
+    find_source_name(URI.parse url)
+  end
+
+
+  @spec find_source_name(URI.t) :: binary
   def find_source_name(%URI{} = url) do
     {:ok, document} =
       url
@@ -47,6 +45,7 @@ defmodule News.Parser do
   end
 
 
+  @spec find_source_url(URI.t) :: binary
   def find_source_url(%URI{} = uri) do
     "#{uri.scheme}://#{uri.host}"
   end

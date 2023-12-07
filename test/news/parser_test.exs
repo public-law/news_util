@@ -25,7 +25,6 @@ defmodule News.ParserTest do
     },
   ]
 
-
   Enum.each(@test_cases, fn %{file: f, url: url, title: title, source_name: source_name, source_url: source_url} ->
     test "finds the title in #{f}" do
       {:ok, document} = Floki.parse_document(File.read!(Test.fixture(unquote f)))
@@ -33,6 +32,25 @@ defmodule News.ParserTest do
       assert Parser.find_title(document)                     == unquote(title)
       assert Parser.find_source_url(URI.parse(unquote url))  == unquote(source_url)
       assert Parser.find_source_name(URI.parse(unquote url)) == unquote(source_name)
+    end
+  end)
+
+
+  @source_name_test_cases [
+    %{
+      file: "article279569109.html",
+      url:  "https://www.star-telegram.com/news/state/texas/article279569109.html",
+    }
+  ]
+
+  Enum.each(@source_name_test_cases, fn %{file: f, url: u} ->
+    test "finds the source name in #{f}" do
+      url  = unquote(u)
+      file = unquote(f)
+
+      {:ok, document} = Floki.parse_document(File.read!(Test.fixture(file)))
+
+      assert Parser.find_source_name(document, url) == "Fort Worth Star-Telegram"
     end
   end)
 end
