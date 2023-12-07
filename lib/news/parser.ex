@@ -35,8 +35,18 @@ defmodule News.Parser do
 
   @spec find_source_name(binary) :: binary
   def find_source_name(url) do
-    "TBD"
+    {:ok, document} =
+      url
+      |> find_source_url()
+      |> CurlEx.get_with_user_agent!(:microsoft_edge_windows)
+      |> Floki.parse_document()
+
+    document
+    |> Floki.find("title")
+    |> Floki.text()
+    |> String.trim()
   end
+
 
   @spec find_source_url(binary) :: binary
   def find_source_url(url) do
