@@ -18,6 +18,15 @@ defmodule News.Article do
     :source_url,
     :date_modified
   ]
+  @enforce_keys [
+    :citations,
+    :title,
+    :description,
+    :source_name,
+    :source_url,
+    :date_modified
+  ]
+
 
   @doc """
   Find citations in a string of HTML or from a URL.
