@@ -31,8 +31,9 @@ defmodule NewsUtil do
 
     cites = find_citations_in_html(html, document)
     title = Parser.find_title(document)
+    descr = find_description_in_html(document)
 
-    %{cites: cites, title: title}
+    %{citations: cites, title: title, description: descr}
   end
 
 
@@ -120,4 +121,15 @@ defmodule NewsUtil do
   end
 
   defp make_cite_to_cal_codes(_), do: nil
+
+
+  # Retrieve the HTML description meta tag's content.
+  # <meta name="description" content="Questions and answers regarding charter school staffing issues." />
+  defp find_description_in_html(document) do
+    document
+    |> Floki.find("meta[name=description]")
+    |> Floki.attribute("content")
+    |> Floki.text()
+    |> String.trim()
+  end
 end
