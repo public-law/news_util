@@ -6,7 +6,7 @@ defmodule News.ParserTest do
   use ExUnit.Case
   doctest News.Parser
 
-  @test_cases_for_title [
+  @test_cases [
     %{
       file:  "qandasec5.asp",
       url:   "https://www.cde.ca.gov/sp/ch/qandasec5.asp",
@@ -26,7 +26,7 @@ defmodule News.ParserTest do
   ]
 
 
-  Enum.each(@test_cases_for_title, fn %{file: f, url: url, title: title, source_name: source_name, source_url: source_url} ->
+  Enum.each(@test_cases, fn %{file: f, url: url, title: title, source_name: source_name, source_url: source_url} ->
     test "finds the title in #{f}" do
       {:ok, document} = Floki.parse_document(File.read!(Test.fixture(unquote f)))
 
