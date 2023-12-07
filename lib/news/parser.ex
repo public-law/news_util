@@ -3,6 +3,16 @@ defmodule News.Parser do
   A module for parsing news articles.
   """
 
+  @spec find_title(
+          binary()
+          | [
+              binary()
+              | {:comment, binary()}
+              | {:pi | binary(), binary() | [{any(), any()}] | %{optional(binary()) => binary()},
+                 list() | %{optional(binary()) => binary()}}
+              | {:doctype, binary(), binary(), binary()}
+            ]
+        ) :: binary
   @doc """
   Find the best title in the HTML tags and meta-tags.
   """

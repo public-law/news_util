@@ -27,6 +27,11 @@ defmodule NewsUtil do
       _      -> File.read!(path)
     end
 
+    find_info_in_html(html)
+  end
+
+
+  def find_info_in_html(html) do
     {:ok, document} = Floki.parse_document(html)
 
     cites = find_citations_in_html(html, document)
