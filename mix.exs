@@ -25,6 +25,7 @@ defmodule NewsUtil.MixProject do
       {:curl_ex, "~> 1.2.0"},
       {:dialyxir, "> 0.0.0", only: [:dev], runtime: false},
       {:floki,    "> 0.0.0"},
+      {:jason,    "> 0.0.0"}
     ]
   end
 end
