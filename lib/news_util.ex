@@ -23,17 +23,19 @@ defmodule NewsUtil do
 
   @spec find_citations_in_file(binary) :: [binary]
   def find_citations_in_file(path) do
-    case Path.extname(path) do
-      ".pdf" -> find_citations_in_html(News.File.read_pdf_as_html!(path))
-      _      -> find_citations_in_html(File.read!(path))
+    html = case Path.extname(path) do
+      ".pdf" -> News.File.read_pdf_as_html!(path)
+      _      -> File.read!(path)
     end
+
+    {:ok, document} = Floki.parse_document(html)
+    find_citations_in_html(html, document)
   end
 
 
-  @spec find_citations_in_html(binary) :: [binary]
-  defp find_citations_in_html(html) do
+  defp find_citations_in_html(html, document) do
     cites_from_hrefs =
-      html
+      document
       |> hrefs()
       |> map(&href_to_cite/1)
 
@@ -62,10 +64,7 @@ defmodule NewsUtil do
   end
 
 
-  @spec hrefs(binary) :: list[URI.t]
-  def hrefs(html) do
-    {:ok, document} = Floki.parse_document(html)
-
+  def hrefs(document) do
     document
     |> Floki.attribute("a", "href")
     |> flatten()
