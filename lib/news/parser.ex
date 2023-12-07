@@ -33,12 +33,14 @@ defmodule News.Parser do
   end
 
 
+  @spec find_source_name(any()) :: binary
   def find_source_name(_document) do
-    "California Department of Education"
+    "TBD"
   end
 
+  @spec find_source_url(any()) :: binary
   def find_source_url(_document) do
-    "https://www.cde.ca.gov"
+    "TBD"
   end
 
 
