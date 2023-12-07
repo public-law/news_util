@@ -8,10 +8,16 @@ alias News.Parser
 
 
 defmodule News.Article do
-  @moduledoc """
-  The main entity being parsed.
-  """
+  @moduledoc "The main entity being parsed."
 
+  defstruct [
+    :citations,
+    :title,
+    :description,
+    :source_name,
+    :source_url,
+    :date_modified
+  ]
 
   @doc """
   Find citations in a string of HTML or from a URL.
@@ -45,7 +51,7 @@ defmodule News.Article do
     source_url = Parser.find_source_url(uri)
     date   = DateModified.parse(document)
 
-    %{
+    %News.Article{
       citations: cites,
       title: title,
       description: descr,
