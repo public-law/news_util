@@ -15,4 +15,11 @@ defmodule News.DateModifiedTest do
 
     assert News.DateModified.parse(document) == nil
   end
+
+
+  test "parse/1 return the Date when there's a dateModified" do
+    {:ok, document} = Floki.parse_document("<html><script type='application/ld+json'>{\"dateModified\": \"2020-01-01\"}</script></html>")
+
+    assert News.DateModified.parse(document) == ~D[2020-01-01]
+  end
 end
