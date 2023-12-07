@@ -39,6 +39,7 @@ defmodule NewsUtil do
     title  = Parser.find_title(document)
     descr  = find_description_in_html(document)
     source = Parser.find_source_name(uri)
+    source_url = Parser.find_source_url(uri)
     date   = DateModified.parse(document)
 
     %{
@@ -46,6 +47,7 @@ defmodule NewsUtil do
       title: title,
       description: descr,
       source_name: source,
+      source_url: source_url,
       date_modified: date
     }
   end

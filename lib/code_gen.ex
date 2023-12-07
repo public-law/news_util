@@ -17,6 +17,8 @@ defmodule CodeGen do
 
 
     """
+    Source.find_or_create_by!(name: "#{info.source_name}", url: "#{info.source_url}")
+
     NewsImport.add(
       Item.find_or_create_by(
         url:              URI('#{url}').to_s,
