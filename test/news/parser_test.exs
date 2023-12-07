@@ -30,9 +30,9 @@ defmodule News.ParserTest do
     test "finds the title in #{f}" do
       {:ok, document} = Floki.parse_document(File.read!(Test.fixture(unquote f)))
 
-      assert Parser.find_title(document)          == unquote(title)
-      assert Parser.find_source_url(unquote url)  == unquote(source_url)
-      assert Parser.find_source_name(unquote url) == unquote(source_name)
+      assert Parser.find_title(document)                     == unquote(title)
+      assert Parser.find_source_url(URI.parse(unquote url))  == unquote(source_url)
+      assert Parser.find_source_name(URI.parse(unquote url)) == unquote(source_name)
     end
   end)
 end

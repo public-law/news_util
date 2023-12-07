@@ -43,7 +43,7 @@ defmodule NewsUtil do
   end
 
 
-  defp find_citations_in_html(html, document) do
+  def find_citations_in_html(html, document) do
     cites_from_hrefs =
       document
       |> hrefs()

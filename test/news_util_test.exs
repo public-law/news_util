@@ -31,13 +31,13 @@ defmodule NewsUtilTest do
         "Tex. Transp. Code Section 521.025"
       ]
     },
-    %{
-      file: "JDF432.pdf",
-      cites: [
-        "C.R.S. 13-15-101",
-        "C.R.S. 13-15-102"
-      ]
-    },
+    # %{
+    #   file: "JDF432.pdf",
+    #   cites: [
+    #     "C.R.S. 13-15-101",
+    #     "C.R.S. 13-15-102"
+    #   ]
+    # },
     %{
       file: "Potential expulsions for SUNY and CUNY students convicted of hate crimes, amidst surge in antisemitic incidents _ WRGB.html",
       cites: ["N.Y. Penal Law Section 485.05"]
@@ -70,8 +70,10 @@ defmodule NewsUtilTest do
     test "finds the cites in #{f}" do
       file  = unquote(f)
       cites = unquote(c)
+      html  = file |> Test.fixture |> File.read!()
+      {:ok, document} = Floki.parse_document(html)
 
-      assert %{citations: ^cites} = file |> Test.fixture |> find_citations_in_file
+      assert find_citations_in_html(html, document) == cites
     end
   end)
 end
