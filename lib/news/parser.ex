@@ -24,9 +24,22 @@ defmodule News.Parser do
   end
 
 
+  @doc """
+  Try to pull the Source name from the OG site_name meta tag.
+  If not found, then call the `find_source_name` function to
+  retrieve the url.
+  """
   @spec find_source_name(Floki.html_tree, binary) :: binary
   def find_source_name(document, url) when is_binary(url) do
-    find_source_name(URI.parse url)
+    document
+    |> Floki.find("meta[property='og:site_name']")
+    |> Floki.attribute("content")
+    |> List.first
+    |> String.trim()
+    |> case do
+        "" -> find_source_name(URI.parse(url))
+        x  -> x
+      end
   end
 
 
