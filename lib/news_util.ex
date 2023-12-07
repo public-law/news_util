@@ -9,7 +9,7 @@ alias News.Parser
 defmodule NewsUtil do
   @moduledoc false
 
-  @spec find_citations(URI.t()) :: %{citations: list(), description: binary(), title: binary()}
+  @spec find_citations(URI.t()) :: %{citations: [binary], description: binary, title: binary}
   @doc """
   Find citations in a string of HTML or from a URL.
   """
@@ -23,8 +23,8 @@ defmodule NewsUtil do
 
 
   @spec find_citations_in_file(
-          binary()
-        ) :: %{citations: list(), description: binary(), title: binary()}
+          binary
+        ) :: %{citations: [binary], description: binary, title: binary}
   def find_citations_in_file(path) do
     html = case Path.extname(path) do
       ".pdf" -> News.File.read_pdf_as_html!(path)
@@ -36,7 +36,7 @@ defmodule NewsUtil do
 
 
   @spec find_info_in_html(binary) :: %{
-          citations: list,
+          citations: [binary],
           description: binary,
           title: binary
         }
