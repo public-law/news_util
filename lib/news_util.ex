@@ -3,6 +3,7 @@ import List
 
 import CalCodes
 import News.Http
+alias News.Parser
 
 
 defmodule NewsUtil do
@@ -27,7 +28,11 @@ defmodule NewsUtil do
     end
 
     {:ok, document} = Floki.parse_document(html)
-    find_citations_in_html(html, document)
+
+    cites = find_citations_in_html(html, document)
+    _title = Parser.find_title(document)
+
+    cites
   end
 
 

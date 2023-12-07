@@ -20,7 +20,9 @@ defmodule News.ParserTest do
 
   Enum.each(@test_cases_for_title, fn %{file: f, title: c} ->
     test "finds the title in #{f}" do
-      assert Parser.find_title(File.read! Test.fixture(unquote(f))) == unquote(c)
+      {:ok, document} = Floki.parse_document(File.read!(Test.fixture(unquote f)))
+
+      assert Parser.find_title(document) == unquote(c)
     end
   end)
 end

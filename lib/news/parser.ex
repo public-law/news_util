@@ -6,14 +6,10 @@ defmodule News.Parser do
   @doc """
   Find the best title in the HTML tags and meta-tags.
   """
-  @spec find_title(binary) :: binary
-  def find_title(html) do
-    {:ok, document} = Floki.parse_document(html)
-
+  def find_title(document) do
     orig_title  = title_tag(document)
     clean_title = title_without_hyphenation(orig_title)
     h1_title    = h1_tag(document)
-
 
     # Whatever the h1 tag matches is definitely the best title.
     # If the h1 tag doesn't match one, then just use the
