@@ -9,7 +9,7 @@ defmodule CodeGen do
     info =
       url
       |> URI.parse()
-      |> NewsUtil.find_citations()
+      |> News.Article.find_info()
 
     citation_list =
       info.citations

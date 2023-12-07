@@ -29,14 +29,17 @@ defmodule News.Parser do
   If not found, then call the `find_source_name` function to
   retrieve the url.
   """
-  @spec find_source_name(Floki.html_tree, binary) :: binary
   def find_source_name(document, url) when is_binary(url) do
+    find_source_name(document, URI.parse(url))
+  end
+
+  def find_source_name(document, url) do
     document
     |> Floki.find("meta[property='og:site_name']")
     |> Floki.attribute("content")
     |> List.first
     |> case do
-        nil -> find_source_name_by_retrieving(URI.parse(url))
+        nil -> find_source_name_by_retrieving(url)
         x   -> x |> String.trim()
       end
   end
