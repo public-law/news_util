@@ -9,7 +9,6 @@ alias News.Parser
 defmodule NewsUtil do
   @moduledoc false
 
-  @spec find_citations(URI.t()) :: %{citations: [binary], description: binary, title: binary}
   @doc """
   Find citations in a string of HTML or from a URL.
   """
@@ -18,36 +17,29 @@ defmodule NewsUtil do
     temp_file = News.File.tmp_file!(url)
     File.write!(temp_file, CurlEx.get_with_user_agent!(url, :microsoft_edge_windows))
 
-    find_citations_in_file(temp_file)
+    find_citations_in_file(temp_file, uri)
   end
 
 
-  @spec find_citations_in_file(
-          binary
-        ) :: %{citations: [binary], description: binary, title: binary}
-  def find_citations_in_file(path) do
+  def find_citations_in_file(path, uri) do
     html = case Path.extname(path) do
       ".pdf" -> News.File.read_pdf_as_html!(path)
       _      -> File.read!(path)
     end
 
-    find_info_in_html(html)
+    find_info_in_html(html, uri)
   end
 
 
-  @spec find_info_in_html(binary) :: %{
-          citations: [binary],
-          description: binary,
-          title: binary
-        }
-  def find_info_in_html(html) do
+  def find_info_in_html(html, uri) do
     {:ok, document} = Floki.parse_document(html)
 
-    cites = find_citations_in_html(html, document)
-    title = Parser.find_title(document)
-    descr = find_description_in_html(document)
+    cites  = find_citations_in_html(html, document)
+    title  = Parser.find_title(document)
+    descr  = find_description_in_html(document)
+    source = Parser.find_source_name(uri)
 
-    %{citations: cites, title: title, description: descr}
+    %{citations: cites, title: title, description: descr, source_name: source}
   end
 
 

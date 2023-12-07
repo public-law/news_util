@@ -33,8 +33,7 @@ defmodule News.Parser do
   end
 
 
-  @spec find_source_name(binary) :: binary
-  def find_source_name(url) do
+  def find_source_name(%URI{} = url) do
     {:ok, document} =
       url
       |> find_source_url()
@@ -48,14 +47,11 @@ defmodule News.Parser do
   end
 
 
-  @spec find_source_url(binary) :: binary
-  def find_source_url(url) do
-    u = URI.parse(url)
-    "#{u.scheme}://#{u.host}"
+  def find_source_url(%URI{} = uri) do
+    "#{uri.scheme}://#{uri.host}"
   end
 
 
-  # Create initial simple implementations of the missing functions.
   def find_title_from_meta_tags(_html) do
     "Charter School FAQ Section 99"
   end

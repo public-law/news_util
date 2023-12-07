@@ -22,7 +22,7 @@ defmodule CodeGen do
         url:              URI('#{url}').to_s,
         title:            "#{info.title}",
         summary:          "#{info.description}",
-        secondary_source: Source.find_by!(name: ''),
+        secondary_source: Source.find_by!(name: '#{info.source_name}'),
         published_on:     Date.parse(''),
       ),
       [
