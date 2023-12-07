@@ -72,6 +72,7 @@ defmodule NewsUtilTest do
       cites = unquote(c)
 
       assert find_citations_in_file(Test.fixture(file)).citations == cites
+      assert %{citations: ^cites} = find_citations_in_file(Test.fixture(file))
     end
   end)
 end
