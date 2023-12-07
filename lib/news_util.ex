@@ -31,6 +31,11 @@ defmodule NewsUtil do
   end
 
 
+  @spec find_info_in_html(binary) :: %{
+          citations: list,
+          description: binary,
+          title: binary
+        }
   def find_info_in_html(html) do
     {:ok, document} = Floki.parse_document(html)
 
