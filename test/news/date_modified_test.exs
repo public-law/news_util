@@ -36,5 +36,4 @@ defmodule News.DateModifiedTest do
 
     assert News.DateModified.parse(document) == ~D[2023-09-20]
   end
-
 end

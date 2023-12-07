@@ -23,7 +23,7 @@ defmodule CodeGen do
         title:            "#{info.title}",
         summary:          "#{info.description}",
         secondary_source: Source.find_by!(name: '#{info.source_name}'),
-        published_on:     Date.parse(''),
+        published_on:     Date.parse('#{info.date_modified}'),
       ),
       [
         #{citation_list}

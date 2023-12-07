@@ -4,6 +4,7 @@ import List
 import CalCodes
 import News.Http
 alias News.Parser
+alias News.DateModified
 
 
 defmodule NewsUtil do
@@ -38,8 +39,15 @@ defmodule NewsUtil do
     title  = Parser.find_title(document)
     descr  = find_description_in_html(document)
     source = Parser.find_source_name(uri)
+    date   = DateModified.parse(document)
 
-    %{citations: cites, title: title, description: descr, source_name: source}
+    %{
+      citations: cites,
+      title: title,
+      description: descr,
+      source_name: source,
+      date_modified: date
+    }
   end
 
 
