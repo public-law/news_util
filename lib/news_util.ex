@@ -30,9 +30,9 @@ defmodule NewsUtil do
     {:ok, document} = Floki.parse_document(html)
 
     cites = find_citations_in_html(html, document)
-    _title = Parser.find_title(document)
+    title = Parser.find_title(document)
 
-    cites
+    %{cites: cites, title: title}
   end
 
 
