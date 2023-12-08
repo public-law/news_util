@@ -5,12 +5,16 @@ defmodule News.DateModified do
 
   @spec parse(Floki.html_tree) :: Date.t | nil
   def parse(document) do
-    {:ok, struct} =
-      case Floki.find(document, "script[type='application/ld+json']") do
-        [] -> {:ok, nil}
-        [{_, _, schema_text}] -> Jason.decode(schema_text)
-      end
+    with [{_, _, schema_text}] <- Floki.find(document, "script[type='application/ld+json']"),
+         {:ok, struct}         <- Jason.decode(schema_text) do
+      parse_ld_json(struct)
+    else
+      _ -> nil
+    end
+  end
 
+  
+  defp parse_ld_json(struct) do
     case struct do
       nil -> nil
       _ ->
