@@ -27,5 +27,17 @@ defmodule News.DateModified do
     end
   end
 
+  defp date_modified(%{"datePublished" => date}) do
+    date_struct = 
+      Regex.run(~r/(\d{4}-\d{2}-\d{2})/, date) 
+      |> List.first
+      |> Date.from_iso8601
+
+    case date_struct do
+      {:ok, date} -> date
+      _           -> nil
+    end
+  end
+
   defp date_modified(_), do: nil
 end
