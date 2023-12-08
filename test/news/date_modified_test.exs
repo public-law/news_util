@@ -10,6 +10,13 @@ defmodule News.DateModifiedTest do
   end
 
 
+  test "parse/1 returns nil when neither date attribute is present" do
+    {:ok, document} = Floki.parse_document("<html><script type='application/ld+json'>{\"dateBorn\": \"2020-01-01\"}</script></html>")
+
+    assert News.DateModified.parse(document) == nil
+  end
+
+
   test "parse/1 returns the date when there's just a datePublished" do
     {:ok, document} = Floki.parse_document("<html><script type='application/ld+json'>{\"datePublished\": \"2020-01-01\"}</script></html>")
 
