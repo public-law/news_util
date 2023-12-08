@@ -14,15 +14,13 @@ defmodule News.DateModified do
   end
 
 
-  defp parse_ld_json(struct) do
-    case Map.get(struct, "dateModified") do
-      nil -> nil
-      date_modified ->
-        iso_date = Regex.run(~r/(\d{4}-\d{2}-\d{2})/, date_modified) |> List.first
-        case Date.from_iso8601(iso_date) do
-          {:ok, date} -> date
-          _ -> nil
-        end
+  defp parse_ld_json(%{"dateModified" => date}) do
+    iso_date = Regex.run(~r/(\d{4}-\d{2}-\d{2})/, date) |> List.first
+    case Date.from_iso8601(iso_date) do
+      {:ok, date} -> date
+      _ -> nil
     end
   end
+
+  defp parse_ld_json(_), do: nil
 end
