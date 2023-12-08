@@ -32,5 +32,6 @@ defmodule News.Http do
   end
 
 
+  @doc "Just a simple HTTP GET request."
   def get!(url), do: CurlEx.get_with_user_agent!(url, :microsoft_edge_windows)
 end
