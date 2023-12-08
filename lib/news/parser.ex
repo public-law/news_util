@@ -3,19 +3,10 @@ defmodule News.Parser do
   A module for parsing news articles.
   """
 
-  @spec find_title(
-          binary()
-          | [
-              binary()
-              | {:comment, binary()}
-              | {:pi | binary(), binary() | [{any(), any()}] | %{optional(binary()) => binary()},
-                 list() | %{optional(binary()) => binary()}}
-              | {:doctype, binary(), binary(), binary()}
-            ]
-        ) :: binary
   @doc """
   Find the best title in the HTML tags and meta-tags.
   """
+  @spec find_title(Floki.html_tree) :: binary
   def find_title(document) do
     orig_title  = title_tag(document)
     clean_title = title_without_hyphenation(orig_title)
@@ -33,7 +24,29 @@ defmodule News.Parser do
   end
 
 
-  def find_source_name(%URI{} = url) do
+  @doc """
+  Try to pull the Source name from the OG site_name meta tag.
+  If not found, then call the `find_source_name` function to
+  retrieve the url.
+  """
+  def find_source_name(document, url) when is_binary(url) do
+    find_source_name(document, URI.parse(url))
+  end
+
+  def find_source_name(document, url) do
+    document
+    |> Floki.find("meta[property='og:site_name']")
+    |> Floki.attribute("content")
+    |> List.first
+    |> case do
+        nil -> find_source_name_by_retrieving(url)
+        x   -> x |> String.trim()
+      end
+  end
+
+
+  @spec find_source_name_by_retrieving(URI.t) :: binary
+  def find_source_name_by_retrieving(%URI{} = url) do
     {:ok, document} =
       url
       |> find_source_url()
@@ -47,6 +60,7 @@ defmodule News.Parser do
   end
 
 
+  @spec find_source_url(URI.t) :: binary
   def find_source_url(%URI{} = uri) do
     "#{uri.scheme}://#{uri.host}"
   end
@@ -66,7 +80,7 @@ defmodule News.Parser do
 
   defp title_without_hyphenation(title) do
     title
-      |> String.split(~r/[-–—]/)
+      |> String.split(~r/[-–—|]/)
       |> List.first
       |> String.trim
   end

@@ -1,48 +1,67 @@
 import Enum
 import List
 
-import CalCodes
-import News.Http
-alias News.Parser
+alias News.Http
 alias News.DateModified
+alias News.Leginfo
+alias News.Parser
+alias News.PublicLaw
 
 
-defmodule NewsUtil do
-  @moduledoc false
+defmodule News.Article do
+  @moduledoc "The main entity being parsed."
+
+  @enforce_keys [
+    :citations,
+    :title,
+    :description,
+    :source_name,
+    :source_url,
+    :date_modified
+  ]
+  defstruct [
+    :citations,
+    :title,
+    :description,
+    :source_name,
+    :source_url,
+    :date_modified
+  ]
+
 
   @doc """
   Find citations in a string of HTML or from a URL.
   """
-  def find_citations(%URI{} = uri) do
+  def parse(%URI{} = uri) do
     url       = URI.to_string(uri)
     temp_file = News.File.tmp_file!(url)
-    File.write!(temp_file, CurlEx.get_with_user_agent!(url, :microsoft_edge_windows))
+    File.write!(temp_file, Http.get!(url))
 
-    find_citations_in_file(temp_file, uri)
+    parse_from_file(temp_file, uri)
   end
 
 
-  def find_citations_in_file(path, uri) do
+  def parse_from_file(path, uri) do
     html = case Path.extname(path) do
       ".pdf" -> News.File.read_pdf_as_html!(path)
       _      -> File.read!(path)
     end
 
-    find_info_in_html(html, uri)
+    parse_from_html(html, uri)
   end
 
 
-  def find_info_in_html(html, uri) do
+  def parse_from_html(html, uri) do
     {:ok, document} = Floki.parse_document(html)
 
-    cites  = find_citations_in_html(html, document)
-    title  = Parser.find_title(document)
-    descr  = find_description_in_html(document)
-    source = Parser.find_source_name(uri)
+    cites      = find_citations_in_html(html, document)
+    title      = Parser.find_title(document)
+    descr      = find_description_in_html(document)
+    source     = Parser.find_source_name(document, uri)
     source_url = Parser.find_source_url(uri)
-    date   = DateModified.parse(document)
+    date       = DateModified.parse(document)
 
-    %{
+    %News.Article{
       citations: cites,
       title: title,
       description: descr,
@@ -96,11 +115,11 @@ defmodule NewsUtil do
   @spec href_to_cite(URI.t) :: nil | binary
   def href_to_cite(%URI{} = url) do
     cond do
-      tld(url) == "public.law" ->
-        public_law_url_to_cite(url)
+      Http.tld(url) == "public.law" ->
+        PublicLaw.url_to_cite(url)
 
       url.host == "leginfo.legislature.ca.gov" ->
-        leginfo_url_to_cite(url)
+        Leginfo.url_to_cite(url)
 
       true -> nil
     end
@@ -113,30 +132,6 @@ defmodule NewsUtil do
     |> sort()
     |> uniq()
   end
-
-
-  defp public_law_url_to_cite(%URI{path: path}) do
-    path
-    |> String.split("/")
-    |> last
-    |> String.replace("_", " ")
-    |> News.Text.titleize
-  end
-
-
-  defp leginfo_url_to_cite(%URI{query: query}) do
-    query
-    |> URI.decode_query()
-    |> make_cite_to_cal_codes()
-  end
-
-
-  defp make_cite_to_cal_codes(%{"lawCode" => code, "sectionNum" => section}) do
-    "CA #{code_to_abbrev(code)} Section #{section}"
-    |> String.replace_suffix(".", "")
-  end
-
-  defp make_cite_to_cal_codes(_), do: nil
 
 
   # Retrieve the HTML description meta tag's content.

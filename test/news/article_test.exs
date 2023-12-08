@@ -1,11 +1,11 @@
 alias News.Test
 
-import NewsUtil
+alias News.Article
 
-defmodule NewsUtilTest do
+defmodule News.ArticleTest do
   @moduledoc false
   use ExUnit.Case
-  doctest NewsUtil
+  doctest News.Article
 
   @test_cases [
     %{
@@ -73,7 +73,7 @@ defmodule NewsUtilTest do
       html  = file |> Test.fixture |> File.read!()
       {:ok, document} = Floki.parse_document(html)
 
-      assert find_citations_in_html(html, document) == cites
+      assert Article.find_citations_in_html(html, document) == cites
     end
   end)
 end

@@ -6,26 +6,26 @@ defmodule CodeGen do
 
   @spec ruby_code(binary) :: binary
   def ruby_code(url) do
-    info =
+    article =
       url
       |> URI.parse()
-      |> NewsUtil.find_citations()
+      |> News.Article.parse()
 
     citation_list =
-      info.citations
+      article.citations
       |> Enum.map_join(",\n    ", fn cite -> "'#{cite}'" end)
 
 
     """
-    Source.find_or_create_by!(name: "#{info.source_name}", url: "#{info.source_url}")
+    Source.find_or_create_by!(name: "#{article.source_name}", url: "#{article.source_url}")
 
     NewsImport.add(
       Item.find_or_create_by(
         url:              URI('#{url}').to_s,
-        title:            "#{info.title}",
-        summary:          "#{info.description}",
-        secondary_source: Source.find_by!(name: '#{info.source_name}'),
-        published_on:     Date.parse('#{info.date_modified}'),
+        title:            "#{article.title}",
+        summary:          "#{article.description}",
+        secondary_source: Source.find_by!(name: '#{article.source_name}'),
+        published_on:     Date.parse('#{article.date_modified}'),
       ),
       [
         #{citation_list}
