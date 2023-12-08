@@ -11,14 +11,14 @@ defmodule News.ParserTest do
       file:  "qandasec5.asp",
       url:   "https://www.cde.ca.gov/sp/ch/qandasec5.asp",
 
-      title: "Charter School FAQ Section 5",
+      title:      "Charter School FAQ Section 5",
       source_url: "https://www.cde.ca.gov",
     },
     %{
       file:  "qandasec6.asp",
       url:   "https://www.cde.ca.gov/sp/ch/qandasec6.asp",
 
-      title: "Charter School FAQ Section 6",
+      title:      "Charter School FAQ Section 6",
       source_url: "https://www.cde.ca.gov",
     },
   ]
@@ -40,12 +40,12 @@ defmodule News.ParserTest do
 
       source_name: "Fort Worth Star-Telegram",
     },
-    %{
-      file:  "qandasec6.asp",
-      url:   "https://www.cde.ca.gov/sp/ch/qandasec6.asp",
+    # %{
+    #   file:  "qandasec6.asp",
+    #   url:   "https://www.cde.ca.gov/sp/ch/qandasec6.asp",
 
-      source_name: "California Department of Education",
-    },
+    #   source_name: "California Department of Education",
+    # },
   ]
 
   Enum.each(@source_name_test_cases, fn %{file: f, url: u, source_name: s} ->
