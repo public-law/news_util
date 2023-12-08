@@ -1,4 +1,4 @@
-defmodule CalCodes do
+defmodule News.CalCodes do
   @moduledoc """
   A module for California leginfo URLs.
   """

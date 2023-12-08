@@ -1,10 +1,11 @@
 import Enum
 import List
 
-import CalCodes
 alias News.Http
 alias News.DateModified
+alias News.Leginfo
 alias News.Parser
+alias News.PublicLaw
 
 
 defmodule News.Article do
@@ -115,10 +116,10 @@ defmodule News.Article do
   def href_to_cite(%URI{} = url) do
     cond do
       Http.tld(url) == "public.law" ->
-        public_law_url_to_cite(url)
+        PublicLaw.url_to_cite(url)
 
       url.host == "leginfo.legislature.ca.gov" ->
-        leginfo_url_to_cite(url)
+        Leginfo.url_to_cite(url)
 
       true -> nil
     end
@@ -131,30 +132,6 @@ defmodule News.Article do
     |> sort()
     |> uniq()
   end
-
-
-  defp public_law_url_to_cite(%URI{path: path}) do
-    path
-    |> String.split("/")
-    |> last
-    |> String.replace("_", " ")
-    |> News.Text.titleize
-  end
-
-
-  defp leginfo_url_to_cite(%URI{query: query}) do
-    query
-    |> URI.decode_query()
-    |> make_cite_to_cal_codes()
-  end
-
-
-  defp make_cite_to_cal_codes(%{"lawCode" => code, "sectionNum" => section}) do
-    "CA #{code_to_abbrev(code)} Section #{section}"
-    |> String.replace_suffix(".", "")
-  end
-
-  defp make_cite_to_cal_codes(_), do: nil
 
 
   # Retrieve the HTML description meta tag's content.
