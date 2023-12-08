@@ -1,3 +1,5 @@
+alias News.Http
+
 defmodule News.Parser do
   @moduledoc """
   A module for parsing news articles.
@@ -49,14 +51,14 @@ defmodule News.Parser do
   def find_source_name_by_retrieving(%URI{} = url) do
     {:ok, document} =
       url
-      |> find_source_url()
-      |> CurlEx.get_with_user_agent!(:microsoft_edge_windows)
-      |> Floki.parse_document()
+      |> find_source_url
+      |> Http.get!
+      |> Floki.parse_document
 
     document
     |> Floki.find("title")
-    |> Floki.text()
-    |> String.trim()
+    |> Floki.text
+    |> String.trim
   end
 
 
@@ -74,13 +76,13 @@ defmodule News.Parser do
   defp title_tag(document) do
     document
     |> Floki.find("title")
-    |> Floki.text()
+    |> Floki.text
   end
 
 
   defp title_without_hyphenation(title) do
     title
-      |> String.split(~r/[-–—|]/)
+      |> String.split(~r/[-–—|]/) # Split on common separators.
       |> List.first
       |> String.trim
   end
