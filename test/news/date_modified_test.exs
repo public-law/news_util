@@ -24,6 +24,13 @@ defmodule News.DateModifiedTest do
   end
 
 
+  test "parse/1 prefers dateModified over datePublished" do
+    {:ok, document} = Floki.parse_document("<html><script type='application/ld+json'>{\"datePublished\": \"2020-01-01\", \"dateModified\": \"2020-01-02\"}</script></html>")
+
+    assert News.DateModified.parse(document) == ~D[2020-01-02]
+  end
+
+
   test "parse/1 returns the Date when there's a dateModified" do
     {:ok, document} = Floki.parse_document("<html><script type='application/ld+json'>{\"dateModified\": \"2020-01-01\"}</script></html>")
 
