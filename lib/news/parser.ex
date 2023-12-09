@@ -85,7 +85,7 @@ defmodule News.Parser do
 
   defp title_without_hyphenation(title) do
     title
-      |> String.split(~r/[-–—|]/) # Split on common separators.
+      |> String.split(~r/ [-–—|] /) # Split on common separators.
       |> List.first
       |> String.trim
   end
