@@ -44,7 +44,7 @@ defmodule News.Parser do
         nil -> find_source_name_by_retrieving(url)
         x   -> x
       end
-    |> String.split(" | ")
+    |> String.split(~r/ [-–—|] /)
     |> List.last
     |> String.trim
   end
