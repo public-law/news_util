@@ -73,7 +73,7 @@ defmodule News.ArticleTest do
       html  = file |> Test.fixture |> File.read!()
       {:ok, document} = Floki.parse_document(html)
 
-      assert Article.find_citations_in_html(html, document) == cites
+      assert Article.find_citations_in_html(document) == cites
     end
   end)
 end

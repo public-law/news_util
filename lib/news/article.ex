@@ -54,7 +54,7 @@ defmodule News.Article do
   def parse_from_html(html, uri) do
     {:ok, document} = Floki.parse_document(html)
 
-    cites      = find_citations_in_html(html, document)
+    cites      = find_citations_in_html(document)
     title      = Parser.find_title(document)
     descr      = find_description_in_html(document)
     source     = Parser.find_source_name(document, uri)
@@ -72,12 +72,13 @@ defmodule News.Article do
   end
 
 
-  def find_citations_in_html(html, document) do
+  def find_citations_in_html(document) do
     cites_from_hrefs =
       document
       |> hrefs()
       |> map(&href_to_cite/1)
 
+    html = Floki.text(document)
     crs_cites_from_text_1 =
       Regex.scan(~r/(C.R.S. &#xa7;(?:&#xa7;)? \d+-\d+-\d+)/, html)
       |> flatten()
