@@ -41,6 +41,12 @@ defmodule News.ParserTest do
 
       source_name: "Fort Worth Star-Telegram",
     },
+    %{
+      file: "legal-recourse-for-victims-of-san-antonio-street-racing-accident.html",
+      url:  "https://www.carabinshaw.com/legal-recourse-for-victims-of-san-antonio-street-racing-accident.html",
+
+      source_name: "Carabin Shaw",
+    }
     # %{
     #   file:  "qandasec6.asp",
     #   url:   "https://www.cde.ca.gov/sp/ch/qandasec6.asp",
