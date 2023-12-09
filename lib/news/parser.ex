@@ -42,7 +42,7 @@ defmodule News.Parser do
     |> List.first
     |> case do
         nil -> find_source_name_by_retrieving(url)
-        x   -> x |> String.trim()
+        x   -> x
       end
     |> String.split(" | ")
     |> List.last
