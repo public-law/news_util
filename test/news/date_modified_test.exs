@@ -1,3 +1,7 @@
+alias News.Test
+
+
+
 defmodule News.DateModifiedTest do
   @moduledoc false
   use ExUnit.Case
@@ -55,6 +59,14 @@ defmodule News.DateModifiedTest do
   test "article:published_time date source" do
     # <meta property=\"article:published_time\" content=\"2020-05-19T16:20:34+00:00\">
     {:ok, document} = Floki.parse_document("<html><head><meta property=\"article:published_time\" content=\"2020-05-19T16:20:34+00:00\"></head></html>")
+
+    assert News.DateModified.parse(document) == ~D[2020-05-19]
+  end
+
+
+  test "article:published_time date source from HTML" do
+    {:ok, document} = "duty-to-settlor.html" |> Test.fixture |> File.read! |> Floki.parse_document
+    # <meta property=\"article:published_time\" content=\"2020-05-19T16:20:34+00:00\">
 
     assert News.DateModified.parse(document) == ~D[2020-05-19]
   end
