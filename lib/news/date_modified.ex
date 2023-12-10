@@ -15,6 +15,12 @@ defmodule News.DateModified do
   end
 
 
+  @spec date_modified(any()) :: nil | Date.t()
+  def date_modified(%{"dateModified" => date}),  do: parse_date_text(date)
+  def date_modified(%{"datePublished" => date}), do: parse_date_text(date)
+  def date_modified(_), do: nil
+
+
   @spec parse_from_meta_tags(Floki.html_tree) :: Date.t | nil
   def parse_from_meta_tags(document) do
     document
@@ -25,22 +31,14 @@ defmodule News.DateModified do
   end
 
 
-  @spec date_modified(any) :: Date.t | nil
-  def date_modified(%{"dateModified" => date}),  do: parse_date_text(date)
-  def date_modified(%{"datePublished" => date}), do: parse_date_text(date)
-  def date_modified(_), do: nil
-
-
   @spec parse_date_text(binary) :: Date.t | nil
   def parse_date_text(a_string) when is_binary(a_string) do
-    date_struct =
-      Regex.run(~r/(\d{4}-\d{2}-\d{2})/, a_string)
-      |> List.first
-      |> Date.from_iso8601
-
-    case date_struct do
-      {:ok, date} -> date
-      _           -> nil
+    with [match | _] <- Regex.run(~r/(\d{4}-\d{2}-\d{2})/, a_string),
+         true        <- is_binary(match),
+         {:ok, date} <- Date.from_iso8601(match) do
+      date
+    else
+      _ -> nil
     end
   end
 
