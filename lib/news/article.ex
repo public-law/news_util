@@ -19,6 +19,7 @@ defmodule News.Article do
     :source_url,
     :date_modified
   ]
+  @derive Jason.Encoder
   defstruct [
     :citations,
     :title,
@@ -32,6 +33,10 @@ defmodule News.Article do
   @doc """
   Find citations in a string of HTML or from a URL.
   """
+  def parse(url) when is_binary(url) do
+    parse(URI.parse(url))
+  end
+
   def parse(%URI{} = uri) do
     url       = URI.to_string(uri)
     temp_file = News.File.tmp_file!(url)

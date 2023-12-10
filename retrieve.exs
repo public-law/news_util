@@ -5,3 +5,7 @@
 #
 
 IO.puts CodeGen.ruby_code(url)
+IO.puts "\n\n"
+
+# Output JSON
+News.Article.parse(url) |> Jason.encode!() |> IO.puts()
