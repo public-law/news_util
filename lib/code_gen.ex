@@ -1,3 +1,5 @@
+alias News.Article
+
 defmodule CodeGen do
   @moduledoc """
   A module for generating code.
@@ -6,10 +8,7 @@ defmodule CodeGen do
 
   @spec ruby_code(binary) :: binary
   def ruby_code(url) do
-    article =
-      url
-      |> URI.parse()
-      |> News.Article.parse()
+    article = Article.parse(url)
 
     citation_list =
       article.citations
