@@ -1,5 +1,5 @@
-alias News.Parser
 alias News.Test
+alias News.Parser
 
 defmodule News.ParserTest do
   @moduledoc false
@@ -26,7 +26,7 @@ defmodule News.ParserTest do
   Enum.each(@test_cases, fn %{file: f, url: url, title: title, source_url: source_url} ->
     test "finds the title in #{f}" do
       file = unquote(f)
-      {:ok, document} = file |> Test.fixture |> File.read! |> Floki.parse_document      
+      {:ok, document} = file |> Test.fixture |> File.read! |> Floki.parse_document
 
       assert Parser.find_title(document)                     == unquote(title)
       assert Parser.find_source_url(URI.parse(unquote url))  == unquote(source_url)
@@ -61,7 +61,7 @@ defmodule News.ParserTest do
       file = unquote(f)
       source_name = unquote(s)
 
-      {:ok, document} = file |> Test.fixture |> File.read! |> Floki.parse_document      
+      {:ok, document} = file |> Test.fixture |> File.read! |> Floki.parse_document
 
       assert Parser.find_source_name(document, url) == source_name
     end
