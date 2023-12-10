@@ -53,7 +53,7 @@ defmodule News.DateModifiedTest do
 
 
   test "article:published_time date source" do
-    {:ok, document} = Floki.parse_document("<html><head><meta property=\"article:published_time\" content=\"2020-05-19T16:20:34+00:00\" /></head></html>")
+    {:ok, document} = Floki.parse_document("<html><head><meta property=\"article:published_time\" content=\"2020-05-19T16:20:34+00:00\"></head></html>")
 
     assert News.DateModified.parse(document) == ~D[2020-05-19]
   end

@@ -10,8 +10,18 @@ defmodule News.DateModified do
          {:ok, schema_org}     <- Jason.decode(schema_text) do
       date_modified(schema_org)
     else
-      _ -> nil
+      _ -> parse_from_meta_tags(document)
     end
+  end
+
+
+  @spec parse(Floki.html_tree) :: Date.t | nil
+  defp parse_from_meta_tags(document) do
+    document
+    |> Floki.find("meta[property='article:published_time']")
+    |> Floki.attribute("content")
+    |> List.first()
+    |> parse_date_text()
   end
 
 
@@ -20,9 +30,9 @@ defmodule News.DateModified do
   defp date_modified(_), do: nil
 
 
-  defp parse_date_text(date) when is_binary(date) do
+  defp parse_date_text(a_string) when is_binary(a_string) do
     date_struct = 
-      Regex.run(~r/(\d{4}-\d{2}-\d{2})/, date) 
+      Regex.run(~r/(\d{4}-\d{2}-\d{2})/, a_string) 
       |> List.first
       |> Date.from_iso8601
 
@@ -31,4 +41,6 @@ defmodule News.DateModified do
       _           -> nil
     end
   end
+
+  defp parse_date_text(_), do: nil
 end
