@@ -7,18 +7,20 @@ defmodule News.DateModified do
   @spec parse(Floki.html_tree) :: Date.t | nil
   def parse(document) do
     with [{_, _, schema_text}] <- Floki.find(document, "script[type='application/ld+json']"),
-         {:ok, schema_org}     <- Jason.decode(schema_text) do
-      date_modified(schema_org)
+         {:ok, schema_org}     <- Jason.decode(schema_text),
+         date                  <- date_modified(schema_org),
+         false                 <- is_nil(date) do
+      date
     else
       _ -> parse_from_meta_tags(document)
     end
   end
 
 
-  @spec date_modified(map) :: Date.t | nil
+  @spec date_modified(any) :: Date.t | nil
   def date_modified(%{"dateModified" => date}),  do: parse_date_text(date)
   def date_modified(%{"datePublished" => date}), do: parse_date_text(date)
-  def date_modified(%{}), do: nil
+  def date_modified(_), do: nil
 
 
   @spec parse_from_meta_tags(Floki.html_tree) :: Date.t | nil
