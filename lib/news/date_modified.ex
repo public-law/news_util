@@ -15,7 +15,7 @@ defmodule News.DateModified do
   end
 
 
-  @spec parse(Floki.html_tree) :: Date.t | nil
+  @spec parse_from_meta_tags(Floki.html_tree) :: Date.t | nil
   defp parse_from_meta_tags(document) do
     document
     |> Floki.find("meta[property='article:published_time']")
@@ -25,14 +25,15 @@ defmodule News.DateModified do
   end
 
 
-  defp date_modified(%{"dateModified" => date}),  do: parse_date_text(date)
-  defp date_modified(%{"datePublished" => date}), do: parse_date_text(date)
-  defp date_modified(_), do: nil
+  @spec date_modified(any) :: nil | Date.t
+  def date_modified(%{"dateModified" => date}),  do: parse_date_text(date)
+  def date_modified(%{"datePublished" => date}), do: parse_date_text(date)
+  def date_modified(_), do: nil
 
 
   defp parse_date_text(a_string) when is_binary(a_string) do
-    date_struct = 
-      Regex.run(~r/(\d{4}-\d{2}-\d{2})/, a_string) 
+    date_struct =
+      Regex.run(~r/(\d{4}-\d{2}-\d{2})/, a_string)
       |> List.first
       |> Date.from_iso8601
 
