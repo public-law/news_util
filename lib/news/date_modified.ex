@@ -20,6 +20,14 @@ defmodule News.DateModified do
   @spec date_modified(any) :: Date.t | nil
   def date_modified(%{"dateModified" => date}),  do: parse_date_text(date)
   def date_modified(%{"datePublished" => date}), do: parse_date_text(date)
+
+  def date_modified(%{"@graph" => yoast_graph}) do
+    yoast_graph
+    |> Enum.map(&date_modified/1)
+    |> Enum.reject(&is_nil/1)
+    |> List.first()
+  end
+
   def date_modified(_), do: nil
 
 
