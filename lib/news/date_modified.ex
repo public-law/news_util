@@ -25,13 +25,13 @@ defmodule News.DateModified do
   end
 
 
-  @spec date_modified(any) :: nil | Date.t
+  @spec date_modified(any) :: Date.t | nil
   def date_modified(%{"dateModified" => date}),  do: parse_date_text(date)
   def date_modified(%{"datePublished" => date}), do: parse_date_text(date)
   def date_modified(_), do: nil
 
 
-  @spec parse_date_text(binary) :: nil | Date.t
+  @spec parse_date_text(binary) :: Date.t | nil
   def parse_date_text(a_string) when is_binary(a_string) do
     date_struct =
       Regex.run(~r/(\d{4}-\d{2}-\d{2})/, a_string)
