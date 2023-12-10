@@ -15,10 +15,10 @@ defmodule News.DateModified do
   end
 
 
-  @spec date_modified(any()) :: nil | Date.t()
+  @spec date_modified(map) :: Date.t | nil
   def date_modified(%{"dateModified" => date}),  do: parse_date_text(date)
   def date_modified(%{"datePublished" => date}), do: parse_date_text(date)
-  def date_modified(_), do: nil
+  def date_modified(%{}), do: nil
 
 
   @spec parse_from_meta_tags(Floki.html_tree) :: Date.t | nil
