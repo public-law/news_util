@@ -3,8 +3,7 @@
 
 ## Retrieves legal citations and bibliograhic info from a web page
 
-This is currently for internal use: It outputs Ruby code that creates
-ActiveRecord objects. Next version will output JSON.
+This is currently for internal use: It outputs JSON or Ruby code.
 
 
 ```bash
@@ -13,21 +12,17 @@ $ retrieve https://probatestars.com/texas-trust-protector-has-no-fiduciary-duty-
 
 produces...
 
-```ruby
-Source.find_or_create_by!(name: "Probate Stars", url: "https://probatestars.com")
-
-NewsImport.add(
-  Item.find_or_create_by(
-    url:              URI('https://probatestars.com/texas-trust-protector-has-no-fiduciary-duty-to-settlor/').to_s,
-    title:            "Texas Trust Protector Has No Fiduciary Duty to Settlor",
-    summary:          "Under Texas law a trust protector has no fiduciary duty to the settlor of the trust, but may have one to the trustee or beneficiaires.",
-    secondary_source: Source.find_by!(name: 'Probate Stars'),
-    published_on:     Date.parse('2020-05-19'),
-  ),
-  [
-    'Tex. Prop. Code Section 114.0031'
-  ]
-)
+```json
+{
+  "title": "What Not to Say at a Drunk Driving Stop",
+  "citations": [
+    "Tex. Transp. Code Title 7 Subtitle J Chapter 724"
+  ],
+  "description": "During a DUI or DWI stop in Orange, TX, it's crucial to navigate the situation wisely. Refrain from admissions of guilt, making incriminating statements, and oversharing personal details. Stay calm, avoid arguing, cooperate without compromising rights, and wisely choose when to mention legal counsel. Making the right choices during the stop can protect your interests. The Bearden Law Firm is here to help.",
+  "source_name": "The Bearden Law Firm",
+  "source_url": "https://beardenlawfirm.net",
+  "date_modified": "2023-10-30"
+}
 ```
 
 
