@@ -30,8 +30,8 @@ defmodule News.ParserTest do
 
   Enum.each(@source_name_test_cases, fn %{file: f, url: url, source_name: source_name} ->
     test "finds the source name in #{f}" do
-      document =    unquote(f) |> Test.fixture_html!
-      url  =        unquote(url)
+      document = unquote(f) |> Test.fixture_html!
+      url  =     unquote(url)
 
       assert Parser.find_source_name(document, url) == unquote(source_name)
     end
