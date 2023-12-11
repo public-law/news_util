@@ -14,10 +14,8 @@ defmodule News.ParserTest do
 
   Enum.each(@title_and_source_url_test_cases, fn %{file: f, url: url, title: title, source_url: source_url} ->
     test "finds the title in #{f}" do
-      file = unquote(f)
-      url  = unquote(url)
-
-      document = file |> Test.fixture_html!
+      document = unquote(f) |> Test.fixture_html!
+      url      = unquote(url)
 
       assert Parser.find_title(document)             == unquote(title)
       assert Parser.find_source_url(URI.parse(url))  == unquote(source_url)
@@ -30,15 +28,12 @@ defmodule News.ParserTest do
     %{file: "street-racing.html",    url: "https://www.carabinshaw.com/legal-recourse-for-victims-of-san-antonio-street-racing-accident.html", source_name: "Carabin Shaw"},
   ]
 
-  Enum.each(@source_name_test_cases, fn %{file: f, url: u, source_name: s} ->
+  Enum.each(@source_name_test_cases, fn %{file: f, url: url, source_name: source_name} ->
     test "finds the source name in #{f}" do
-      url  =        unquote(u)
-      file =        unquote(f)
-      source_name = unquote(s)
+      document =    unquote(f) |> Test.fixture_html!
+      url  =        unquote(url)
 
-      document = file |> Test.fixture_html!
-
-      assert Parser.find_source_name(document, url) == source_name
+      assert Parser.find_source_name(document, url) == unquote(source_name)
     end
   end)
 end
