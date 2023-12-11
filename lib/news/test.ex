@@ -10,8 +10,8 @@ defmodule News.Test do
   @spec fixture_html!(binary) :: Floki.dom
   def fixture_html!(filename) do
     filename
-    |> fixture_file!()
-    |> Floki.parse_document!()
+    |> fixture_file!
+    |> Floki.parse_document!
   end
 
 
@@ -21,7 +21,7 @@ defmodule News.Test do
   @spec fixture_file!(binary) :: binary
   def fixture_file!(filename) do
     filename
-    |> fixture_path()
+    |> fixture_path
     |> File.read!
   end
 
