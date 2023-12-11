@@ -15,7 +15,7 @@ defmodule News.DateModifiedTest do
     %{date: "2020-01-01", html: "<html><script type='application/ld+json'>{\"dateModified\": \"2020-01-01\"}</script></html>"},
     %{date: "2023-08-25", html: "<html><script type='application/ld+json'>{\"dateModified\": \"Fri, 2023-08-25 21:16:28\"}</script></html>"},
     %{date: "2023-09-20", html: "<html><script type='application/ld+json'>{\"dateModified\": \"2023-09-20T16:20:21-05:00\"}</script></html>"},
-    %{date: "2020-05-19", html: "<html><head><meta property=\"article:published_time\" content=\"2020-05-19T16:20:34+00:00\"></head></html>"}
+    %{date: "2020-05-19", html: "<html><head><meta property=\"article:published_time\" content=\"2020-05-19T16:20:34+00:00\"></head></html>"},
   ]
 
   # Create and run a test for each of the @test_cases
@@ -33,7 +33,6 @@ defmodule News.DateModifiedTest do
 
   test "article:published_time date source from HTML" do
     document = "duty-to-settlor.html" |> Test.fixture |> File.read!
-
     assert DateModified.parse(document) == ~D[2020-05-19]
   end
 end
