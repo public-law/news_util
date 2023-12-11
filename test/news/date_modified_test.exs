@@ -131,9 +131,9 @@ defmodule News.DateModifiedTest do
   """
 
   test "parse/1 returns the date from a Yoast-style schema.org" do
-    document = Floki.parse_document!("<html><script type='application/ld+json'>#{@yoast_schema_org}</script></html>")
+    document = "<html><script type='application/ld+json'>#{@yoast_schema_org}</script></html>"
 
-    assert News.DateModified.parse(document) == ~D[2020-05-19]
+    assert DateModified.parse(document) == ~D[2020-05-19]
   end
 
 
@@ -187,8 +187,8 @@ defmodule News.DateModifiedTest do
 
 
   test "article:published_time date source from HTML" do
-    document = "duty-to-settlor.html" |> Test.fixture |> File.read! |> Floki.parse_document!
+    document = "duty-to-settlor.html" |> Test.fixture |> File.read!
 
-    assert News.DateModified.parse(document) == ~D[2020-05-19]
+    assert DateModified.parse(document) == ~D[2020-05-19]
   end
 end
