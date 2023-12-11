@@ -70,7 +70,7 @@ defmodule News.ArticleTest do
     test "finds the cites in #{f}" do
       path  = unquote(f)
       cites = unquote(c)
-      {:ok, document} = path |> Test.fixture |> File.read! |> Floki.parse_document
+      {:ok, document} = path |> Test.fixture_file! |> Floki.parse_document
 
       assert Article.find_citations_in_html(document) == cites
     end
