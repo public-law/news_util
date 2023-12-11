@@ -16,7 +16,7 @@ defmodule News.ArticleTest do
       cites: ["CA Educ Code Section 47605"]
     },
     %{
-      file: "Formal Marriage License | Fort Bend County.html",
+      file: "Formal Marriage License.html",
       cites: [
         "Tex. Fam. Code Section 2.003",
         "Tex. Fam. Code Section 2.013",
@@ -30,15 +30,8 @@ defmodule News.ArticleTest do
         "Tex. Transp. Code Section 521.025"
       ]
     },
-    # %{
-    #   file: "JDF432.pdf",
-    #   cites: [
-    #     "C.R.S. 13-15-101",
-    #     "C.R.S. 13-15-102"
-    #   ]
-    # },
     %{
-      file: "Potential expulsions for SUNY and CUNY students convicted of hate crimes, amidst surge in antisemitic incidents _ WRGB.html",
+      file: "expulsions.html",
       cites: ["N.Y. Penal Law Section 485.05"]
     },
     %{
@@ -46,7 +39,7 @@ defmodule News.ArticleTest do
       cites: ["ORS 146.117"]
     },
     %{
-      file: "ppb-police-body-came-explained-how-it-works",
+      file: "ppb",
       cites: ["ORS 133.741"]
     },
     %{
