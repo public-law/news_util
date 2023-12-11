@@ -8,21 +8,26 @@ defmodule News.Test do
   Returns the parsed contents of a fixture HTML file.
   """
   @spec fixture_html!(binary) :: Floki.dom
-  def fixture_html!(name) do
-    name |> fixture_file!() |> Floki.parse_document!()
+  def fixture_html!(filename) do
+    filename
+    |> fixture_file!()
+    |> Floki.parse_document!()
   end
+
 
   @doc """
   Returns the contents of a fixture file.
   """
   @spec fixture_file!(binary) :: binary
-  def fixture_file!(name) do
-    name |> fixture_path() |> File.read!
+  def fixture_file!(filename) do
+    filename
+    |> fixture_path()
+    |> File.read!
   end
 
 
   @spec fixture_path(binary) :: binary
-  defp fixture_path(name) do
-    Path.join("test/fixtures", name)
+  defp fixture_path(filename) do
+    Path.join("test/fixtures", filename)
   end
 end
