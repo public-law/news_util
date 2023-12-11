@@ -27,8 +27,8 @@ defmodule News.Parser do
 
 
   @doc """
-  Try to pull the Source name from the OG site_name meta tag.
-  If not found, then call the `find_source_name` function to
+  Try to pull the Source name from the OpenGraph site_name meta tag.
+  If not found, then call `find_source_name_by_retrieving` to
   retrieve the url.
   """
   def find_source_name(document, url) when is_binary(url) do
