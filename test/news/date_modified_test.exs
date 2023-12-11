@@ -9,7 +9,7 @@ defmodule News.DateModifiedTest do
 
 
   @doc """
-  A helper that optimistically returns the value from an `{:ok, x}` tuple.
+  A test helper that optimistically returns the value from an `{:ok, x}` tuple.
   """
   def from_ok({:ok, x}), do: x
 
@@ -159,16 +159,17 @@ end
     },
   ]
 
+  # Create and run a test for each of the @test_cases
   Enum.each(@test_cases, fn %{html: html, date: date} ->
     test "finds the date in #{html}" do
       {:ok, document} = unquote(html) |> Floki.parse_document
-      date = unquote(date)
 
-      if is_nil(date) do
-        assert News.DateModified.parse(document) == nil
-      else
-        assert News.DateModified.parse(document) == from_ok(Date.from_iso8601(date))
+      expected = case unquote(date) do
+        nil -> nil
+        date_string -> from_ok(Date.from_iso8601(date_string))
       end
+
+      assert News.DateModified.parse(document) == expected
     end
   end)
 
