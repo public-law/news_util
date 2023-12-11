@@ -68,9 +68,8 @@ defmodule News.ArticleTest do
 
   Enum.each(@test_cases, fn %{file: f, cites: c} ->
     test "finds the cites in #{f}" do
-      path  = unquote(f)
-      cites = unquote(c)
-      {:ok, document} = path |> Test.fixture_file! |> Floki.parse_document
+      document = unquote(f) |> Test.fixture_html!
+      cites    = unquote(c)
 
       assert Article.find_citations_in_html(document) == cites
     end
