@@ -32,7 +32,7 @@ defmodule News.DateModifiedTest do
 
 
   test "article:published_time date source from HTML" do
-    document = "duty-to-settlor.html" |> Test.fixture |> File.read!
+    document = "duty-to-settlor.html" |> Test.fixture_file!
     assert DateModified.parse(document) == ~D[2020-05-19]
   end
 end

@@ -127,8 +127,8 @@ defmodule News.YoastTest do
   """
 
   test "parse/1 returns the date from a Yoast-style schema.org" do
-    document = "<html><script type='application/ld+json'>#{@yoast_schema_org}</script></html>"
+    html = "<html><script type='application/ld+json'>#{@yoast_schema_org}</script></html>"
 
-    assert DateModified.parse(document) == ~D[2020-05-19]
+    assert DateModified.parse(html) == ~D[2020-05-19]
   end
 end
