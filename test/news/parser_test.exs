@@ -17,7 +17,7 @@ defmodule News.ParserTest do
       file = unquote(f)
       url  = unquote(url)
 
-      document = file |> Test.fixture_file! |> Floki.parse_document!
+      document = file |> Test.fixture_html!
 
       assert Parser.find_title(document)             == unquote(title)
       assert Parser.find_source_url(URI.parse(url))  == unquote(source_url)
@@ -36,7 +36,7 @@ defmodule News.ParserTest do
       file =        unquote(f)
       source_name = unquote(s)
 
-      document = file |> Test.fixture_file! |> Floki.parse_document!
+      document = file |> Test.fixture_html!
 
       assert Parser.find_source_name(document, url) == source_name
     end

@@ -5,7 +5,7 @@ defmodule News.Test do
 
 
   @doc """
-  Returns the parsed contents of a fixture HTML file.
+  Returns the parsed contents of an HTML fixture file.
   """
   @spec fixture_html!(binary) :: Floki.dom
   def fixture_html!(filename) do

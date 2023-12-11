@@ -1,5 +1,4 @@
 alias News.Test
-
 alias News.Article
 
 defmodule News.ArticleTest do
