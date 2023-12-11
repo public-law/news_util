@@ -8,6 +8,12 @@ defmodule News.DateModifiedTest do
   doctest News.DateModified
 
 
+  @doc """
+  A helper that optimistically returns the value from an `{:ok, x}` tuple.
+  """
+  def from_ok({:ok, x}), do: x
+
+
   @yoast_schema_org """
   {
     "@context": "https://schema.org",
@@ -146,24 +152,26 @@ end
     %{
       html: "<html><script type='application/ld+json'>{\"dateBorn\": \"2020-01-01\"}</script></html>",
       date: nil,
-    }
+    },
+    %{
+      html: "<html><script type='application/ld+json'>{\"datePublished\": \"2020-01-01\"}</script></html>",
+      date: "2020-01-01",
+    },
   ]
 
   Enum.each(@test_cases, fn %{html: html, date: date} ->
     test "finds the date in #{html}" do
       {:ok, document} = unquote(html) |> Floki.parse_document
+      date = unquote(date)
 
-      assert News.DateModified.parse(document) == unquote(date)
+      if is_nil(date) do
+        assert News.DateModified.parse(document) == nil
+      else
+        assert News.DateModified.parse(document) == from_ok(Date.from_iso8601(date))
+      end
     end
   end)
 
-
-
-  test "parse/1 returns the date when there's just a datePublished" do
-    {:ok, document} = Floki.parse_document("<html><script type='application/ld+json'>{\"datePublished\": \"2020-01-01\"}</script></html>")
-
-    assert News.DateModified.parse(document) == ~D[2020-01-01]
-  end
 
 
   test "parse/1 prefers dateModified over datePublished" do
