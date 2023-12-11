@@ -4,7 +4,9 @@ defmodule News.DateModified do
   """
 
   @doc "Parses the most recent Published Date from a news article."
-  @spec parse(Floki.html_tree) :: Date.t | nil
+  @spec parse(Floki.html_tree | binary) :: Date.t | nil
+  def parse(document) when is_binary(document), do: Floki.parse_document!(document) |> parse
+
   def parse(document) do
     with [{_, _, schema_text}] <- Floki.find(document, "script[type='application/ld+json']"),
          {:ok, schema_org}     <- Jason.decode(schema_text),

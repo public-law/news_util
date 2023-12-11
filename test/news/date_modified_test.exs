@@ -1,4 +1,5 @@
 alias News.Test
+alias News.DateModified
 
 
 
@@ -6,12 +7,6 @@ defmodule News.DateModifiedTest do
   @moduledoc false
   use ExUnit.Case
   doctest News.DateModified
-
-
-  @doc """
-  A test helper that optimistically returns the value from an `{:ok, x}` tuple.
-  """
-  def from_ok({:ok, x}), do: x
 
 
   @yoast_schema_org """
@@ -132,18 +127,17 @@ defmodule News.DateModifiedTest do
             ]
         }
     ]
-}
-"""
+  }
+  """
 
-test "parse/1 returns the date from a Yoast-style schema.org" do
-  {:ok, document} = Floki.parse_document("<html><script type='application/ld+json'>#{@yoast_schema_org}</script></html>")
+  test "parse/1 returns the date from a Yoast-style schema.org" do
+    document = Floki.parse_document!("<html><script type='application/ld+json'>#{@yoast_schema_org}</script></html>")
 
-  assert News.DateModified.parse(document) == ~D[2020-05-19]
-end
+    assert News.DateModified.parse(document) == ~D[2020-05-19]
+  end
 
 
 
-  # Refactor the tests into @test-cases for the following tests
   @test_cases [
     %{
       html: "<html></html>",
@@ -157,65 +151,44 @@ end
       html: "<html><script type='application/ld+json'>{\"datePublished\": \"2020-01-01\"}</script></html>",
       date: "2020-01-01",
     },
+    %{
+      html: "<html><script type='application/ld+json'>{\"datePublished\": \"2020-01-01\", \"dateModified\": \"2020-01-02\"}</script></html>",
+      date: "2020-01-02",
+    },
+    %{
+      html: "<html><script type='application/ld+json'>{\"dateModified\": \"2020-01-01\"}</script></html>",
+      date: "2020-01-01",
+    },
+    %{
+      html: "<html><script type='application/ld+json'>{\"dateModified\": \"Fri, 2023-08-25 21:16:28\"}</script></html>",
+      date: "2023-08-25"
+    },
+    %{
+      html: "<html><script type='application/ld+json'>{\"dateModified\": \"2023-09-20T16:20:21-05:00\"}</script></html>",
+      date: "2023-09-20"
+    },
+    %{
+      html: "<html><head><meta property=\"article:published_time\" content=\"2020-05-19T16:20:34+00:00\"></head></html>",
+      date: "2020-05-19"
+    },
   ]
 
   # Create and run a test for each of the @test_cases
   Enum.each(@test_cases, fn %{html: html, date: date} ->
     test "finds the date in #{html}" do
-      {:ok, document} = unquote(html) |> Floki.parse_document
+      html_string = unquote(html)
+      date_string = unquote(date)
 
-      expected = case unquote(date) do
-        nil -> nil
-        date_string -> from_ok(Date.from_iso8601(date_string))
-      end
+      expected = if is_binary(date_string), do: Date.from_iso8601!(date_string), else: nil
 
-      assert News.DateModified.parse(document) == expected
+      assert DateModified.parse(html_string) == expected
     end
   end)
 
 
-
-  test "parse/1 prefers dateModified over datePublished" do
-    {:ok, document} = Floki.parse_document("<html><script type='application/ld+json'>{\"datePublished\": \"2020-01-01\", \"dateModified\": \"2020-01-02\"}</script></html>")
-
-    assert News.DateModified.parse(document) == ~D[2020-01-02]
-  end
-
-
-  test "parse/1 returns the Date when there's a dateModified" do
-    {:ok, document} = Floki.parse_document("<html><script type='application/ld+json'>{\"dateModified\": \"2020-01-01\"}</script></html>")
-
-    assert News.DateModified.parse(document) == ~D[2020-01-01]
-  end
-
-
-  test "parse/1 returns the Date when there's a dateModified in National Law Review format" do
-    {:ok, document} = Floki.parse_document("<html><script type='application/ld+json'>{\"dateModified\": \"Fri, 2023-08-25 21:16:28\"}</script></html>")
-
-    assert News.DateModified.parse(document) == ~D[2023-08-25]
-  end
-
-
-  test "parse/1 returns the Date when there's a dateModified in Ft. Worth Star Telegram format" do
-    {:ok, document} = Floki.parse_document("<html><script type='application/ld+json'>{\"dateModified\": \"2023-09-20T16:20:21-05:00\"}</script></html>")
-
-    assert News.DateModified.parse(document) == ~D[2023-09-20]
-  end
-
-
-  test "article:published_time date source" do
-    # <meta property=\"article:published_time\" content=\"2020-05-19T16:20:34+00:00\">
-    {:ok, document} = Floki.parse_document("<html><head><meta property=\"article:published_time\" content=\"2020-05-19T16:20:34+00:00\"></head></html>")
-
-    assert News.DateModified.parse(document) == ~D[2020-05-19]
-  end
-
-
   test "article:published_time date source from HTML" do
-    {:ok, document} = "duty-to-settlor.html" |> Test.fixture |> File.read! |> Floki.parse_document
+    document = "duty-to-settlor.html" |> Test.fixture |> File.read! |> Floki.parse_document!
 
     assert News.DateModified.parse(document) == ~D[2020-05-19]
   end
-
-
 end
