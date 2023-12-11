@@ -129,20 +129,34 @@ defmodule News.DateModifiedTest do
 }
 """
 
+test "parse/1 returns the date from a Yoast-style schema.org" do
+  {:ok, document} = Floki.parse_document("<html><script type='application/ld+json'>#{@yoast_schema_org}</script></html>")
+
+  assert News.DateModified.parse(document) == ~D[2020-05-19]
+end
 
 
-  test "parse/1 returns nil when there's no schema" do
-    {:ok, document} = Floki.parse_document("<html></html>")
 
-    assert News.DateModified.parse(document) == nil
-  end
+  # Refactor the tests into @test-cases for the following tests
+  @test_cases [
+    %{
+      html: "<html></html>",
+      date: nil,
+    },
+    %{
+      html: "<html><script type='application/ld+json'>{\"dateBorn\": \"2020-01-01\"}</script></html>",
+      date: nil,
+    }
+  ]
 
+  Enum.each(@test_cases, fn %{html: html, date: date} ->
+    test "finds the date in #{html}" do
+      {:ok, document} = unquote(html) |> Floki.parse_document
 
-  test "parse/1 returns nil when neither date attribute is present" do
-    {:ok, document} = Floki.parse_document("<html><script type='application/ld+json'>{\"dateBorn\": \"2020-01-01\"}</script></html>")
+      assert News.DateModified.parse(document) == unquote(date)
+    end
+  end)
 
-    assert News.DateModified.parse(document) == nil
-  end
 
 
   test "parse/1 returns the date when there's just a datePublished" do
@@ -195,9 +209,4 @@ defmodule News.DateModifiedTest do
   end
 
 
-  test "parse/1 returns the date when there's a Yoast schema.org" do
-    {:ok, document} = Floki.parse_document("<html><script type='application/ld+json'>#{@yoast_schema_org}</script></html>")
-
-    assert News.DateModified.parse(document) == ~D[2020-05-19]
-  end
 end
