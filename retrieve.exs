@@ -4,7 +4,7 @@
 # Create the Ruby code to import the cites.
 #
 
-IO.puts CodeGen.ruby_code(url)
+IO.puts News.CodeGen.ruby_code(url)
 
 # Output JSON
 # IO.puts "\n\n"

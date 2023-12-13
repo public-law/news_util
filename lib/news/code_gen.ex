@@ -1,6 +1,6 @@
 alias News.Article
 
-defmodule CodeGen do
+defmodule News.CodeGen do
   @moduledoc """
   A module for generating code.
   """
