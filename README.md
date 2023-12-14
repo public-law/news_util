@@ -1,4 +1,4 @@
-# NewsUtil
+# Bibliographic Info Crawler
 
 
 ## Retrieves legal citations and bibliograhic info from a web page
