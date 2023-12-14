@@ -1,7 +1,7 @@
 # Bibliographic Info Scraper
 
 
-## Retrieves legal citations and bibliograhic info from a web page
+## Parses legal citations and bibliograhic info from a web page
 
 It outputs JSON or Ruby code.
 
