@@ -3,7 +3,7 @@
 
 ## Retrieves legal citations and bibliograhic info from a web page
 
-This is currently for internal use: It outputs JSON or Ruby code.
+It outputs JSON or Ruby code.
 
 
 ```bash
