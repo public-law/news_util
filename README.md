@@ -3,9 +3,6 @@
 
 ## Parses legal citations and bibliograhic info from a web page
 
-It outputs JSON or Ruby code.
-
-
 ```bash
 $ retrieve https://probatestars.com/texas-trust-protector-has-no-fiduciary-duty-to-settlor/
 ```
