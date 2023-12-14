@@ -1,4 +1,4 @@
-# Bibliographic Info Crawler
+# Bibliographic Info Scraper
 
 
 ## Retrieves legal citations and bibliograhic info from a web page
